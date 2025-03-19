@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .role-selection {
+            margin-bottom: 20px;
+        }
+        .role-btn {
+            display: inline-block;
+            width: 45%;
+            padding: 15px 0;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            text-align: center;
+        }
+        .role-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .user-role {
+            background-color: #4a90e2;
+            color: white;
+        }
+        .robot-role {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .role-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .role-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .first-player {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .game-area, .victory-screen {
+            display: none;
+        }
+        .btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-number {
+            font-size: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        .result {
+            font-size: 24px;
+            margin: 20px 0;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+        .status {
+            font-size: 18px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .user-turn {
+            background-color: rgba(74, 144, 226, 0.2);
+            border-left: 5px solid #4a90e2;
+            color: #2c3e50;
+        }
+        .robot-turn {
+            background-color: rgba(231, 76, 60, 0.2);
+            border-left: 5px solid #e74c3c;
+            color: #2c3e50;
+        }
+        .history {
+            text-align: left;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .game-history {
+            height: 300px;
+            min-height: 300px;
+            overflow-y: auto;
+        }
+        .victory-history {
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .history-item {
+            padding: 8px 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .user-move {
+            background-color: rgba(74, 144, 226, 0.1);
+            border-left: 3px solid #4a90e2;
+        }
+        .robot-move {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 3px solid #e74c3c;
+        }
+        .victory-message {
+            font-size: 28px;
+            margin: 20px 0;
+            animation: pulse 1.5s infinite;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .user-wins {
+            background-color: rgba(74, 144, 226, 0.2);
+            color: #4a90e2;
+            border: 2px solid #4a90e2;
+        }
+        .robot-wins {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .player-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .player-indicator {
+            width: 45%;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+        .player-indicator.active {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            animation: highlight 1.5s infinite;
+        }
+        @keyframes highlight {
+            0% { box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
+            50% { box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
+        }
+        .user-indicator {
+            background-color: rgba(74, 144, 226, 0.1);
+            border: 2px solid #4a90e2;
+        }
+        .robot-indicator {
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 2px solid #e74c3c;
+        }
+        .player-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        .player-name {
+            font-weight: bold;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall 5s linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        .trophy {
+            font-size: 48px;
+            margin: 10px 0;
+        }
+        .history-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 8px;
+        }
+        .victory-section {
+            margin-bottom: 30px;
+        }
+        .move-count {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .game-rules {
+            background-color: #fffde7;
+            border: 1px solid #ffd54f;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: left;
+            font-size: 14px;
+            color: #5d4037;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Number Game</h1>
+        
+        <div class="game-rules">
+            <strong>Game Rules:</strong>
+            <ul>
+                <li>Players take turns adding 1 or 2 to the sum</li>
+                <li>Whoever makes the sum reach 10 loses the game</li>
+            </ul>
+        </div>
+        
+        <div id="roleSelection" class="role-selection">
+            <h2>Who goes first?</h2>
+            <div class="role-options">
+                <div id="userFirst" class="role-btn user-role">
+                    <div class="role-icon">👤</div>
+                    <div class="role-name">User First</div>
+                    <div class="first-player">You start the game</div>
+                </div>
+                <div id="robotFirst" class="role-btn robot-role">
+                    <div class="role-icon">🤖</div>
+                    <div class="role-name">Robot First</div>
+                    <div class="first-player">Robot starts the game</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="gameArea" class="game-area">
+            <div class="player-indicators">
+                <div id="userIndicator" class="player-indicator user-indicator">
+                    <div class="player-icon">👤</div>
+                    <div class="player-name">User</div>
+                </div>
+                <div id="robotIndicator" class="player-indicator robot-indicator">
+                    <div class="player-icon">🤖</div>
+                    <div class="player-name">Robot</div>
+                </div>
+            </div>
+            
+            <div id="status" class="status">Game starting...</div>
+            <div id="result" class="result">Sum: 0</div>
+            
+            <div id="userControls">
+                <button id="btn1" class="btn btn-number">1</button>
+                <button id="btn2" class="btn btn-number">2</button>
+            </div>
+            
+            <div class="history game-history">
+                <div class="history-title">Game History:</div>
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+        <div id="victoryScreen" class="victory-screen">
+            <div class="victory-section">
+                <div class="trophy">🏆</div>
+                <div id="victoryMessage" class="victory-message">Victory!</div>
+                <div id="finalResult" class="result">Sum: 10</div>
+            </div>
+            
+            <div class="history victory-history">
+                <div class="history-title">Complete Game History:</div>
+                <div id="moveCount" class="move-count">Total moves: 0</div>
+                <div id="victoryHistoryList"></div>
+            </div>
+            
+            <button id="playAgain" class="btn">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let sum = 0;
+        let isUserTurn = true;
+        let firstPlayer = ''; // 'user' or 'robot'
+        const losingSum = 10; // Changed from winningSum to losingSum to reflect new rules
+        let gameHistory = []; // Store all moves
+        
+        // DOM elements
+        const roleSelection = document.getElementById('roleSelection');
+        const gameArea = document.getElementById('gameArea');
+        const victoryScreen = document.getElementById('victoryScreen');
+        const victoryMessage = document.getElementById('victoryMessage');
+        const finalResult = document.getElementById('finalResult');
+        const status = document.getElementById('status');
+        const result = document.getElementById('result');
+        const userControls = document.getElementById('userControls');
+        const btn1 = document.getElementById('btn1');
+        const btn2 = document.getElementById('btn2');
+        const historyList = document.getElementById('historyList');
+        const victoryHistoryList = document.getElementById('victoryHistoryList');
+        const moveCount = document.getElementById('moveCount');
+        const playAgain = document.getElementById('playAgain');
+        const userIndicator = document.getElementById('userIndicator');
+        const robotIndicator = document.getElementById('robotIndicator');
+        
+        // Role selection
+        document.getElementById('userFirst').addEventListener('click', () => {
+            firstPlayer = 'user';
+            startGame();
+        });
+        
+        document.getElementById('robotFirst').addEventListener('click', () => {
+            firstPlayer = 'robot';
+            startGame();
+        });
+        
+        // Play again button
+        playAgain.addEventListener('click', () => {
+            resetGame();
+            roleSelection.style.display = 'block';
+            victoryScreen.style.display = 'none';
+        });
+        
+        // Start the game
+        function startGame() {
+            roleSelection.style.display = 'none';
+            gameArea.style.display = 'block';
+            
+            // Reset game history
+            gameHistory = [];
+            
+            // Set who goes first based on selection
+            isUserTurn = (firstPlayer === 'user');
+            
+            updateTurnIndicators();
+            
+            // If robot goes first, trigger its move
+            if (firstPlayer === 'robot') {
+                setTimeout(robotMove, 1000);
+            }
+        }
+        
+        // Update turn indicators
+        function updateTurnIndicators() {
+            if (isUserTurn) {
+                status.textContent = "User's turn! Choose 1 or 2.";
+                status.className = "status user-turn";
+                userIndicator.classList.add('active');
+                robotIndicator.classList.remove('active');
+                userControls.style.pointerEvents = 'auto';
+            } else {
+                status.textContent = "Robot is thinking...";
+                status.className = "status robot-turn";
+                robotIndicator.classList.add('active');
+                userIndicator.classList.remove('active');
+                userControls.style.pointerEvents = 'none';
+            }
+        }
+        
+        // Reset the game
+        function resetGame() {
+            sum = 0;
+            isUserTurn = true;
+            gameHistory = [];
+            historyList.innerHTML = '';
+            victoryHistoryList.innerHTML = '';
+            result.textContent = 'Sum: 0';
+        }
+        
+        // Handle user's move
+        btn1.addEventListener('click', () => makeMove(1, true));
+        btn2.addEventListener('click', () => makeMove(2, true));
+        
+        // Make a move
+        function makeMove(number, isHuman) {
+            // Only allow human moves during user's turn
+            if (isHuman && !isUserTurn) {
+                return;
+            }
+            
+            sum += number;
+            
+            // Update UI
+            result.textContent = `Sum: ${sum}`;
+            
+            // Add to history
+            const player = isHuman ? 'User' : 'Robot';
+            const moveText = `${player} added ${number}. Sum: ${sum}`;
+            
+            // Store in game history array
+            gameHistory.push({
+                player: player,
+                number: number,
+                sum: sum,
+                text: moveText
+            });
+            
+            // Add to history display
+            const historyItem = document.createElement('div');
+            historyItem.className = `history-item ${player.toLowerCase()}-move`;
+            historyItem.textContent = moveText;
+            historyList.appendChild(historyItem);
+            historyList.scrollTop = historyList.scrollHeight;
+            
+            // Check for game end - now whoever makes sum reach 10 loses
+            if (sum >= losingSum) {
+                // The current player loses, so the other player wins
+                const winner = player === 'User' ? 'Robot' : 'User';
+                showVictory(winner);
+                return;
+            }
+            
+            // Toggle turn
+            isUserTurn = !isUserTurn;
+            
+            // Update turn indicators
+            updateTurnIndicators();
+            
+            // If it's robot's turn, trigger its move
+            if (!isUserTurn) {
+                setTimeout(robotMove, 1000);
+            }
+        }
+        
+        // Robot's move
+        function robotMove() {
+            // New strategy: try to make the opponent reach 10
+            // The winning positions are 7, 4, 1
+            // From these positions, no matter what the opponent does, Robot can force a win
+            let choice;
+            
+            if (firstPlayer === 'robot') {
+                // If Robot goes first, it should follow the optimal strategy to win
+                if (sum === 0) {
+                    choice = 1; // Start with 1 to establish control
+                } else if (sum === 3) {
+                    choice = 1; // Make it 4
+                } else if (sum === 6) {
+                    choice = 1; // Make it 7
+                } else if (sum === 2) {
+                    choice = 2; // Make it 4
+                } else if (sum === 5) {
+                    choice = 2; // Make it 7
+                } else if (sum === 8) {
+                    choice = 1; // Make it 9, forcing User to make it 10
+                } else if (sum === 9) {
+                    choice = 1; // Make it 10 and lose (should never happen with optimal play)
+                } else {
+                    // If we're not at a strategic position, choose randomly
+                    choice = Math.random() < 0.5 ? 1 : 2;
+                }
+            } else {
+                // If User goes first, Robot should still try to win if possible
+                if (sum === 7) {
+                    choice = 2; // Make it 9, forcing User to make it 10
+                } else if (sum === 8) {
+                    choice = 1; // Make it 9, forcing User to make it 10
+                } else if (sum === 4) {
+                    choice = 2; // Make it 6
+                } else if (sum === 5) {
+                    choice = 2; // Make it 7
+                } else if (sum === 1) {
+                    choice = 2; // Make it 3
+                } else if (sum === 2) {
+                    choice = 1; // Make it 3
+                } else if (sum === 9) {
+                    choice = 1; // Make it 10 and lose (should never happen with optimal play)
+                } else {
+                    // If we're not at a strategic position, choose randomly
+                    choice = Math.random() < 0.5 ? 1 : 2;
+                }
+            }
+            
+            makeMove(choice, false);
+        }
+        
+        // Show victory screen
+        function showVictory(winner) {
+            // Clear the victory history list
+            victoryHistoryList.innerHTML = '';
+            
+            // Update move count
+            moveCount.textContent = `Total moves: ${gameHistory.length}`;
+            
+            // Rebuild the complete history from our stored array
+            gameHistory.forEach(move => {
+                const historyItem = document.createElement('div');
+                historyItem.className = `history-item ${move.player.toLowerCase()}-move`;
+                historyItem.textContent = move.text;
+                victoryHistoryList.appendChild(historyItem);
+            });
+            
+            // Hide game area and show victory screen
+            gameArea.style.display = 'none';
+            victoryScreen.style.display = 'block';
+            
+            // Update victory information
+            finalResult.textContent = `Final Sum: ${sum}`;
+            
+            if (winner === 'User') {
+                victoryMessage.textContent = '👤 User Wins! 🎉';
+                victoryMessage.className = 'victory-message user-wins';
+            } else {
+                victoryMessage.textContent = '🤖 Robot Wins! 🎉';
+                victoryMessage.className = 'victory-message robot-wins';
+            }
+            
+            // Create confetti effect
+            createConfetti();
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
