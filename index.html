@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Number Game</title>
+    <title>数字游戏</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -257,28 +257,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>Number Game</h1>
+        <h1>数字游戏</h1>
         
         <div class="game-rules">
-            <strong>Game Rules:</strong>
+            <strong>游戏规则：</strong>
             <ul>
-                <li>Players take turns adding 1 or 2 to the sum</li>
-                <li>The game ends when the sum reaches <span class="target-highlight">10 or higher</span></li>
+                <li>玩家轮流给总和加1或2</li>
+                <li>当总和达到<span class="target-highlight">10或更高</span>时游戏结束</li>
             </ul>
         </div>
         
         <div id="roleSelection" class="role-selection">
-            <h2>Who goes first?</h2>
+            <h2>谁先开始？</h2>
             <div class="role-options">
                 <div id="userFirst" class="role-btn user-role">
                     <div class="role-icon">👤</div>
-                    <div class="role-name">User First</div>
-                    <div class="first-player">You start the game</div>
+                    <div class="role-name">用户先手</div>
+                    <div class="first-player">你开始游戏</div>
                 </div>
                 <div id="robotFirst" class="role-btn robot-role">
                     <div class="role-icon">🤖</div>
-                    <div class="role-name">Robot First</div>
-                    <div class="first-player">Robot starts the game</div>
+                    <div class="role-name">机器人先手</div>
+                    <div class="first-player">机器人开始游戏</div>
                 </div>
             </div>
         </div>
@@ -287,16 +287,16 @@
             <div class="player-indicators">
                 <div id="userIndicator" class="player-indicator user-indicator">
                     <div class="player-icon">👤</div>
-                    <div class="player-name">User</div>
+                    <div class="player-name">用户</div>
                 </div>
                 <div id="robotIndicator" class="player-indicator robot-indicator">
                     <div class="player-icon">🤖</div>
-                    <div class="player-name">Robot</div>
+                    <div class="player-name">机器人</div>
                 </div>
             </div>
             
-            <div id="status" class="status">Game starting...</div>
-            <div id="result" class="result">Sum: 0</div>
+            <div id="status" class="status">游戏开始...</div>
+            <div id="result" class="result">总和: 0</div>
             
             <div id="userControls">
                 <button id="btn1" class="btn btn-number">1</button>
@@ -304,7 +304,7 @@
             </div>
             
             <div class="history game-history">
-                <div class="history-title">Game History:</div>
+                <div class="history-title">游戏历史：</div>
                 <div id="historyList"></div>
             </div>
         </div>
@@ -312,17 +312,17 @@
         <div id="victoryScreen" class="victory-screen">
             <div class="victory-section">
                 <div class="trophy">🏆</div>
-                <div id="victoryMessage" class="victory-message">Victory!</div>
-                <div id="finalResult" class="result">Sum: 12</div>
+                <div id="victoryMessage" class="victory-message">胜利！</div>
+                <div id="finalResult" class="result">总和: 12</div>
             </div>
             
             <div class="history victory-history">
-                <div class="history-title">Complete Game History:</div>
-                <div id="moveCount" class="move-count">Total moves: 0</div>
+                <div class="history-title">完整游戏历史：</div>
+                <div id="moveCount" class="move-count">总步数: 0</div>
                 <div id="victoryHistoryList"></div>
             </div>
             
-            <button id="playAgain" class="btn">Play Again</button>
+            <button id="playAgain" class="btn">再玩一次</button>
         </div>
     </div>
 
@@ -392,13 +392,13 @@
         // Update turn indicators
         function updateTurnIndicators() {
             if (isUserTurn) {
-                status.textContent = "User's turn! Choose 1 or 2.";
+                status.textContent = "用户回合！选择1或2。";
                 status.className = "status user-turn";
                 userIndicator.classList.add('active');
                 robotIndicator.classList.remove('active');
                 userControls.style.pointerEvents = 'auto';
             } else {
-                status.textContent = "Robot is thinking...";
+                status.textContent = "机器人思考中...";
                 status.className = "status robot-turn";
                 robotIndicator.classList.add('active');
                 userIndicator.classList.remove('active');
@@ -413,7 +413,7 @@
             gameHistory = [];
             historyList.innerHTML = '';
             victoryHistoryList.innerHTML = '';
-            result.textContent = 'Sum: 0';
+            result.textContent = '总和: 0';
         }
         
         // Check if a number is a multiple of 3
@@ -435,11 +435,11 @@
             sum += number;
             
             // Update UI
-            result.textContent = `Sum: ${sum}`;
+            result.textContent = `总和: ${sum}`;
             
             // Add to history
-            const player = isHuman ? 'User' : 'Robot';
-            const moveText = `${player} added ${number}. Sum: ${sum}`;
+            const player = isHuman ? '用户' : '机器人';
+            const moveText = `${player} 添加了 ${number}。总和: ${sum}`;
             
             // Store in game history array
             gameHistory.push({
@@ -451,7 +451,7 @@
             
             // Add to history display
             const historyItem = document.createElement('div');
-            historyItem.className = `history-item ${player.toLowerCase()}-move`;
+            historyItem.className = `history-item ${isHuman ? 'user' : 'robot'}-move`;
             historyItem.textContent = moveText;
             historyList.appendChild(historyItem);
             historyList.scrollTop = historyList.scrollHeight;
@@ -464,7 +464,7 @@
                     showVictory(player);
                 } else {
                     // Current player loses if sum is not a multiple of 3
-                    const winner = player === 'User' ? 'Robot' : 'User';
+                    const winner = player === '用户' ? '机器人' : '用户';
                     showVictory(winner);
                 }
                 return;
@@ -540,7 +540,7 @@
             victoryHistoryList.innerHTML = '';
             
             // Update move count
-            moveCount.textContent = `Total moves: ${gameHistory.length}`;
+            moveCount.textContent = `总步数: ${gameHistory.length}`;
             
             // Rebuild the complete history from our stored array
             gameHistory.forEach(move => {
@@ -555,13 +555,13 @@
             victoryScreen.style.display = 'block';
             
             // Update victory information
-            finalResult.textContent = `Final Sum: ${sum}`;
+            finalResult.textContent = `最终总和: ${sum}`;
             
-            if (winner === 'User') {
-                victoryMessage.textContent = '👤 User Wins! 🎉';
+            if (winner === '用户') {
+                victoryMessage.textContent = '👤 用户获胜！🎉';
                 victoryMessage.className = 'victory-message user-wins';
             } else {
-                victoryMessage.textContent = '🤖 Robot Wins! 🎉';
+                victoryMessage.textContent = '🤖 机器人获胜！🎉';
                 victoryMessage.className = 'victory-message robot-wins';
             }
             
