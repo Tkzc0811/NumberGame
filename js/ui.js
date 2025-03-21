@@ -153,14 +153,29 @@ const UI = {
         this.elements.finalResult.textContent = `最终总和: ${sum}`;
         this.elements.moveCount.textContent = `总步数: ${moveCount}`;
         
-        const isTie = sum === 0 && moveCount === 0; // 添加平局情况判断
+        const isTie = sum === 0 && moveCount === 0;
         
         if (winner === '你') {
             this.elements.victoryMessage.textContent = '🎉 你获胜了！🎉';
             this.elements.victoryMessage.className = 'victory-message user-wins';
+            // 添加胜利类，用于CSS样式区分
+            this.elements.victoryScreen.classList.add('win');
+            this.elements.victoryScreen.classList.remove('lose');
         } else {
-            this.elements.victoryMessage.textContent = '🤖 AI获胜！🎉';
+            this.elements.victoryMessage.textContent = '😢 你输了！';
             this.elements.victoryMessage.className = 'victory-message robot-wins';
+            // 添加失败类，用于CSS样式区分
+            this.elements.victoryScreen.classList.add('lose');
+            this.elements.victoryScreen.classList.remove('win');
+        }
+        
+        const promptText = document.querySelector('.prompt-text');
+        if (winner === '你') {
+            promptText.textContent = '恭喜你完成了这一局！想挑战自己吗？';
+            promptText.classList.remove('lose');
+        } else {
+            promptText.textContent = '别气馁，再来一局试试看？';
+            promptText.classList.add('lose');
         }
     }
 }; 

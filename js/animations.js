@@ -61,8 +61,10 @@ const Animations = {
         // 显示模态框
         UI.showVictoryModal();
         
-        // 创建彩带效果
-        this.createConfetti();
+        // 只在玩家获胜时创建彩带效果
+        if (winner === '你') {
+            this.createConfetti();
+        }
     },
     
     // 准备历史记录列表

@@ -702,4 +702,30 @@ body {
     25% { content: "."; }
     50% { content: ".."; }
     75% { content: "..."; }
+}
+
+/* 调整胜利/失败界面样式 */
+.victory-screen.win .trophy {
+    font-size: 60px;
+    margin: 15px 0;
+    animation: bounce 2s infinite;
+}
+
+.victory-screen.lose .trophy {
+    font-size: 60px;
+    margin: 15px 0;
+    animation: none;
+    opacity: 0.5;
+}
+
+.victory-message.robot-wins {
+    color: var(--secondary-color);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* 添加失败界面特有的样式 */
+.prompt-text.lose {
+    color: #777;
+    font-style: italic;
 } 
