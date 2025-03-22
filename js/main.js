@@ -5,4 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 设置样式和动画
     Animations.setupConfettiStyle();
+    
+    // 默认选中AI先手
+    UI.toggleRoleSelection('robot');
 }); 

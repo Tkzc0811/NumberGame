@@ -21,12 +21,20 @@
                         <div class="role-name">你先手</div>
                         <div class="role-desc">你将先行动</div>
                     </div>
-                    <div id="robotFirstBtn" class="role-btn robot-role">
-                        <div class="role-icon">🤖</div>
+                    <div id="robotFirstBtn" class="role-btn robot-role selected">
+                        <div class="role-icon">
+                            <img src="assest/ai.png" alt="AI" class="ai-icon">
+                        </div>
                         <div class="role-name">AI先手</div>
                         <div class="role-desc">AI将先行动</div>
                     </div>
                 </div>
+                
+                <div class="start-buttons">
+                    <button id="startGameBtn" class="btn btn-primary">开始游戏</button>
+                    <button id="showAllHistoryBtn" class="btn btn-outline">查看历史对局</button>
+                </div>
+                
                 <div class="game-rules">
                     <h3>游戏规则:</h3>
                     <p>1. 玩家轮流报数，每次可以报1或2</p>
@@ -57,7 +65,9 @@
                             </div>
                             <div class="vs-label">VS</div>
                             <div id="robotIndicator" class="player ai-player">
-                                <div class="player-avatar">🤖</div>
+                                <div class="player-avatar">
+                                    <img src="assest/ai.png" alt="AI" class="ai-icon">
+                                </div>
                                 <div class="player-name">AI</div>
                             </div>
                         </div>
@@ -113,6 +123,41 @@
             </div>
             <div class="victory-buttons">
                 <button class="btn btn-primary close-history-btn">返回</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 全部历史对局模态框 -->
+    <div id="allHistoryModal" class="modal-overlay">
+        <div class="all-history-modal">
+            <div class="history-modal-header">
+                <div class="history-modal-title">历史对局记录</div>
+                <!-- <button class="close-all-history-btn">&times;</button> -->
+            </div>
+            <div class="history-stats">
+                <div class="stat-item">总对局数: <span id="totalGames">0</span></div>
+                <div class="stat-item">你赢: <span id="userWins">0</span></div>
+                <div class="stat-item">AI赢: <span id="aiWins">0</span></div>
+            </div>
+            <div class="all-games-container">
+                <table id="allGamesTable" class="games-table">
+                    <thead>
+                        <tr>
+                            <th>对局</th>
+                            <th>时间</th>
+                            <th>先手</th>
+                            <th>获胜方</th>
+                            <th>步数</th>
+                            <th>查看</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allGamesTableBody">
+                        <!-- 这里将动态填充历史对局 -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="victory-buttons">
+                <button class="btn btn-primary close-all-history-btn">返回</button>
             </div>
         </div>
     </div>

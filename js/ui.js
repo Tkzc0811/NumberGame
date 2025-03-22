@@ -1,6 +1,7 @@
 // UI相关函数
 const UI = {
     elements: {}, // 存储所有UI元素引用
+    isViewingFromAllHistory: false, // 标记是否是从全部历史进入游戏详情
     
     // 初始化UI元素引用
     init() {
@@ -12,10 +13,12 @@ const UI = {
             gameArea: document.getElementById('gameArea'),
             victoryModal: document.getElementById('victoryModal'),
             historyModal: document.getElementById('historyModal'),
+            allHistoryModal: document.getElementById('allHistoryModal'),
             victoryScreen: document.getElementById('victoryScreen'),
             playAgain: document.getElementById('playAgain'),
             viewHistory: document.getElementById('viewHistory'),
             closeHistoryBtns: document.querySelectorAll('.close-history-btn'),
+            closeAllHistoryBtns: document.querySelectorAll('.close-all-history-btn'),
             status: document.getElementById('status'),
             result: document.getElementById('result'),
             historyList: document.getElementById('historyList'),
@@ -27,7 +30,13 @@ const UI = {
             finalResult: document.getElementById('finalResult'),
             victoryMessage: document.getElementById('victoryMessage'),
             btn1: document.getElementById('btn1'),
-            btn2: document.getElementById('btn2')
+            btn2: document.getElementById('btn2'),
+            startGameBtn: document.getElementById('startGameBtn'),
+            showAllHistoryBtn: document.getElementById('showAllHistoryBtn'),
+            allGamesTableBody: document.getElementById('allGamesTableBody'),
+            totalGames: document.getElementById('totalGames'),
+            userWins: document.getElementById('userWins'),
+            aiWins: document.getElementById('aiWins')
         };
         
         // 绑定UI事件
@@ -37,8 +46,24 @@ const UI = {
     // 绑定UI事件
     bindEvents() {
         // 角色选择按钮事件
-        this.elements.userFirstBtn.addEventListener('click', () => Game.startGame(true));
-        this.elements.robotFirstBtn.addEventListener('click', () => Game.startGame(false));
+        this.elements.userFirstBtn.addEventListener('click', () => {
+            this.toggleRoleSelection('user');
+        });
+        
+        this.elements.robotFirstBtn.addEventListener('click', () => {
+            this.toggleRoleSelection('robot');
+        });
+        
+        // 开始游戏按钮
+        this.elements.startGameBtn.addEventListener('click', () => {
+            const isUserFirst = this.elements.userFirstBtn.classList.contains('selected');
+            Game.startGame(isUserFirst);
+        });
+        
+        // 查看历史对局按钮
+        this.elements.showAllHistoryBtn.addEventListener('click', () => {
+            this.showAllHistoryModal();
+        });
         
         // 数字按钮事件
         this.elements.btn1.addEventListener('click', () => Game.makeMove(1, true));
@@ -52,6 +77,7 @@ const UI = {
         });
         
         this.elements.viewHistory.addEventListener('click', () => {
+            this.isViewingFromAllHistory = false;
             this.elements.victoryScreen.style.display = 'none';
             this.elements.historyModal.style.display = 'block';
         });
@@ -59,7 +85,22 @@ const UI = {
         this.elements.closeHistoryBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.elements.historyModal.style.display = 'none';
-                this.elements.victoryScreen.style.display = 'block';
+                
+                // 根据来源决定返回到哪里
+                if (this.isViewingFromAllHistory) {
+                    // 返回到历史对局列表
+                    this.hideVictoryModal();
+                    this.showAllHistoryModal();
+                } else {
+                    // 返回到胜利界面
+                    this.elements.victoryScreen.style.display = 'block';
+                }
+            });
+        });
+        
+        this.elements.closeAllHistoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.hideAllHistoryModal();
             });
         });
         
@@ -69,6 +110,23 @@ const UI = {
                 this.hideVictoryModal();
             }
         });
+        
+        this.elements.allHistoryModal.addEventListener('click', (e) => {
+            if (e.target === this.elements.allHistoryModal) {
+                this.hideAllHistoryModal();
+            }
+        });
+    },
+    
+    // 切换角色选择
+    toggleRoleSelection(role) {
+        if (role === 'user') {
+            this.elements.userFirstBtn.classList.add('selected');
+            this.elements.robotFirstBtn.classList.remove('selected');
+        } else {
+            this.elements.robotFirstBtn.classList.add('selected');
+            this.elements.userFirstBtn.classList.remove('selected');
+        }
     },
     
     // 显示角色选择
@@ -95,6 +153,160 @@ const UI = {
     hideVictoryModal() {
         this.elements.victoryModal.classList.remove('active');
         document.body.style.overflow = '';
+    },
+    
+    // 显示所有历史对局模态框
+    showAllHistoryModal() {
+        // 更新历史统计信息
+        this.updateHistoryStats();
+        
+        // 更新历史游戏列表
+        this.updateAllGamesTable();
+        
+        // 显示模态框
+        this.elements.allHistoryModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    },
+    
+    // 隐藏所有历史对局模态框
+    hideAllHistoryModal() {
+        this.elements.allHistoryModal.classList.remove('active');
+        document.body.style.overflow = '';
+    },
+    
+    // 更新历史统计信息
+    updateHistoryStats() {
+        const stats = Game.getHistoryStats();
+        this.elements.totalGames.textContent = stats.totalGames;
+        this.elements.userWins.textContent = stats.userWins;
+        this.elements.aiWins.textContent = stats.aiWins;
+    },
+    
+    // 更新历史游戏表格
+    updateAllGamesTable() {
+        const allGames = Game.getAllGamesHistory();
+        
+        // 清空表格
+        this.elements.allGamesTableBody.innerHTML = '';
+        
+        // 如果没有游戏记录，显示提示信息
+        if (allGames.length === 0) {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 6;
+            cell.textContent = '暂无游戏记录';
+            cell.style.textAlign = 'center';
+            cell.style.padding = '20px';
+            row.appendChild(cell);
+            this.elements.allGamesTableBody.appendChild(row);
+            return;
+        }
+        
+        // 按时间倒序排列游戏记录
+        allGames.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // 填充表格
+        allGames.forEach((game, index) => {
+            const row = document.createElement('tr');
+            
+            // 对局编号
+            const numberCell = document.createElement('td');
+            numberCell.textContent = index + 1;
+            row.appendChild(numberCell);
+            
+            // 时间
+            const dateCell = document.createElement('td');
+            const gameDate = new Date(game.date);
+            dateCell.textContent = gameDate.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            row.appendChild(dateCell);
+            
+            // 先手
+            const firstPlayerCell = document.createElement('td');
+            firstPlayerCell.textContent = game.firstPlayer;
+            firstPlayerCell.style.fontWeight = 'bold';
+            if (game.firstPlayer === '你') {
+                firstPlayerCell.style.color = 'var(--primary-color)';
+            } else {
+                firstPlayerCell.style.color = 'var(--secondary-color)';
+            }
+            row.appendChild(firstPlayerCell);
+            
+            // 获胜方
+            const winnerCell = document.createElement('td');
+            winnerCell.textContent = game.winner;
+            winnerCell.style.fontWeight = 'bold';
+            if (game.winner === '你') {
+                winnerCell.style.color = 'var(--primary-color)';
+            } else {
+                winnerCell.style.color = 'var(--secondary-color)';
+            }
+            row.appendChild(winnerCell);
+            
+            // 步数
+            const movesCell = document.createElement('td');
+            movesCell.textContent = game.moves;
+            row.appendChild(movesCell);
+            
+            // 查看按钮
+            const actionCell = document.createElement('td');
+            const viewButton = document.createElement('button');
+            viewButton.className = 'view-game-btn';
+            viewButton.textContent = '查看';
+            viewButton.addEventListener('click', () => this.showGameDetails(game.id));
+            actionCell.appendChild(viewButton);
+            row.appendChild(actionCell);
+            
+            this.elements.allGamesTableBody.appendChild(row);
+        });
+    },
+    
+    // 显示特定游戏的详细信息
+    showGameDetails(gameId) {
+        // 获取游戏记录
+        const game = Game.getGameById(gameId);
+        if (!game) return;
+        
+        // 清空历史记录列表
+        this.elements.victoryHistoryList.innerHTML = '';
+        
+        // 更新标题和信息
+        document.querySelector('.history-modal-title').textContent = 
+            `游戏记录 - ${new Date(game.date).toLocaleString('zh-CN')}`;
+        this.elements.moveCount.textContent = `总步数: ${game.moves}`;
+        
+        // 填充历史记录
+        game.history.forEach(move => {
+            const historyItem = document.createElement('div');
+            historyItem.className = `history-item ${move.player === '你' ? 'user-move' : 'robot-move'}`;
+            
+            const moveNumber = document.createElement('div');
+            moveNumber.className = 'move-number';
+            moveNumber.textContent = move.number;
+            
+            const moveText = document.createElement('div');
+            moveText.className = 'move-text';
+            moveText.textContent = `${move.player} ${move.text}`;
+            
+            historyItem.appendChild(moveNumber);
+            historyItem.appendChild(moveText);
+            this.elements.victoryHistoryList.appendChild(historyItem);
+        });
+        
+        // 设置标记表示从历史列表进入
+        this.isViewingFromAllHistory = true;
+        
+        // 关闭全部历史模态框，显示单个游戏历史
+        this.hideAllHistoryModal();
+        this.elements.victoryModal.classList.add('active');
+        this.elements.victoryScreen.style.display = 'none';
+        this.elements.historyModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
     },
     
     // 更新玩家回合指示器

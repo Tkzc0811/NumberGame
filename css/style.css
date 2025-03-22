@@ -944,4 +944,179 @@ body {
     .history-area {
         height: 420px;
     }
+}
+
+/* 添加选中角色的样式 */
+.role-btn.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+/* 开始按钮区域 */
+.start-buttons {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3a80d2;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background-color: rgba(74, 144, 226, 0.1);
+    transform: translateY(-2px);
+}
+
+/* 全部历史对局模态框 */
+.all-history-modal {
+    background-color: white;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.history-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+}
+
+.stat-item {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.all-games-container {
+    overflow-y: auto;
+    max-height: 50vh;
+    margin: 15px 0;
+}
+
+.games-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.games-table th, 
+.games-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.games-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.games-table tr:hover {
+    background-color: #f5f7fa;
+}
+
+.view-game-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-game-btn:hover {
+    background-color: #3a80d2;
+}
+
+.close-all-history-btn {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #666;
+}
+
+/* 在小屏幕上调整表格样式 */
+@media (max-width: 600px) {
+    .games-table th, 
+    .games-table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .history-stats {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+/* AI图标样式 */
+.ai-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.player-avatar .ai-icon {
+    width: 36px;
+    height: 36px;
+}
+
+/* 修改历史记录模态框，只保留一个返回按钮 */
+.history-modal .victory-buttons .close-history-btn {
+    display: none; /* 隐藏底部的返回按钮 */
+}
+
+/* 可选：将顶部的X按钮修改为返回文本样式 */
+.history-modal .close-history-btn {
+    font-size: 16px;
+    padding: 5px 10px;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #555;
+}
+
+.history-modal .close-history-btn:hover {
+    background-color: #f0f0f0;
 } 
