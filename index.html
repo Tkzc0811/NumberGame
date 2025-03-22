@@ -35,6 +35,10 @@
                     <button id="showAllHistoryBtn" class="btn btn-outline">查看历史对局</button>
                 </div>
                 
+                <div class="history-actions">
+                    <button id="clearHistoryBtn" class="btn btn-danger">清除历史记录</button>
+                </div>
+                
                 <div class="game-rules">
                     <h3>游戏规则:</h3>
                     <p>1. 玩家轮流报数，每次可以报1或2</p>
@@ -158,6 +162,18 @@
             </div>
             <div class="victory-buttons">
                 <button class="btn btn-primary close-all-history-btn">返回</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 确认清除历史记录模态框 -->
+    <div id="confirmClearModal" class="modal-overlay">
+        <div class="confirm-modal">
+            <div class="confirm-title">确认清除所有历史记录？</div>
+            <div class="confirm-message">此操作将永久删除所有游戏记录，无法恢复。</div>
+            <div class="confirm-buttons">
+                <button id="confirmClearBtn" class="btn btn-danger">确认清除</button>
+                <button id="cancelClearBtn" class="btn btn-outline">取消</button>
             </div>
         </div>
     </div>

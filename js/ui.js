@@ -14,11 +14,15 @@ const UI = {
             victoryModal: document.getElementById('victoryModal'),
             historyModal: document.getElementById('historyModal'),
             allHistoryModal: document.getElementById('allHistoryModal'),
+            confirmClearModal: document.getElementById('confirmClearModal'),
             victoryScreen: document.getElementById('victoryScreen'),
             playAgain: document.getElementById('playAgain'),
             viewHistory: document.getElementById('viewHistory'),
             closeHistoryBtns: document.querySelectorAll('.close-history-btn'),
             closeAllHistoryBtns: document.querySelectorAll('.close-all-history-btn'),
+            clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+            confirmClearBtn: document.getElementById('confirmClearBtn'),
+            cancelClearBtn: document.getElementById('cancelClearBtn'),
             status: document.getElementById('status'),
             result: document.getElementById('result'),
             historyList: document.getElementById('historyList'),
@@ -63,6 +67,30 @@ const UI = {
         // 查看历史对局按钮
         this.elements.showAllHistoryBtn.addEventListener('click', () => {
             this.showAllHistoryModal();
+        });
+        
+        // 清除历史记录按钮
+        this.elements.clearHistoryBtn.addEventListener('click', () => {
+            this.showConfirmClearModal();
+        });
+        
+        // 确认清除历史记录
+        this.elements.confirmClearBtn.addEventListener('click', () => {
+            if (Game.clearAllHistory()) {
+                this.hideConfirmClearModal();
+                // 显示提示消息
+                alert('历史记录已清除！');
+                // 如果正在查看历史，更新历史记录列表
+                if (this.elements.allHistoryModal.classList.contains('active')) {
+                    this.updateHistoryStats();
+                    this.updateAllGamesTable();
+                }
+            }
+        });
+        
+        // 取消清除历史记录
+        this.elements.cancelClearBtn.addEventListener('click', () => {
+            this.hideConfirmClearModal();
         });
         
         // 数字按钮事件
@@ -116,6 +144,24 @@ const UI = {
                 this.hideAllHistoryModal();
             }
         });
+        
+        this.elements.confirmClearModal.addEventListener('click', (e) => {
+            if (e.target === this.elements.confirmClearModal) {
+                this.hideConfirmClearModal();
+            }
+        });
+    },
+    
+    // 显示确认清除模态框
+    showConfirmClearModal() {
+        this.elements.confirmClearModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    },
+    
+    // 隐藏确认清除模态框
+    hideConfirmClearModal() {
+        this.elements.confirmClearModal.classList.remove('active');
+        document.body.style.overflow = '';
     },
     
     // 切换角色选择

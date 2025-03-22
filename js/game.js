@@ -187,5 +187,11 @@ const Game = {
             userWins: history.filter(game => game.winner === '你').length,
             aiWins: history.filter(game => game.winner === 'AI').length
         };
+    },
+    
+    // 清除所有历史记录
+    clearAllHistory() {
+        localStorage.removeItem('numberGameHistory');
+        return true;
     }
 }; 
