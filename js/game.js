@@ -82,22 +82,22 @@ const Game = {
         
         switch (this.sum) {
             case 0: // 开局选2，AI先手必胜的关键第一步
-                number = 2;
+                number = 1;
                 break;
             case 1: // 处于必败点，尽量拖延
-                number = 2; // 选择2，推进到3
+                number = Math.random() < 0.5 ? 1 : 2;
                 break;
             case 2: // 必胜点，选2推进到4（而非选1推进到3）
                 number = 2;
                 break;
             case 3: // 处于必败点，随便选
-                number = Math.random() < 0.5 ? 1 : 2;
+                number = 1;
                 break;
             case 4: // 必胜点，选2推进到6（而非选1推进到5）
-                number = 2;
-                break;
-            case 5: // 处于必败点，随便选
                 number = Math.random() < 0.5 ? 1 : 2;
+            break;
+            case 5: // 处于必败点，随便选
+                number = 2;
                 break;
             case 6: // 必胜点，选1推进到7
                 number = 1;
