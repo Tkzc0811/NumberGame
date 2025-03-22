@@ -32,6 +32,7 @@ body {
     display: flex;
     flex-direction: column;
     max-height: 90vh; /* 限制高度为视口高度的90% */
+    transition: all 0.3s ease;
 }
 
 .header {
@@ -655,19 +656,43 @@ body {
 }
 
 /* 响应式设计 */
-@media (min-width: 768px) {
-    /* PC端样式 */
+@media (min-width: 1200px) {
+    /* 大屏幕设备 */
+    .container {
+        max-width: 900px;
+        max-height: 85vh;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    /* 平板和小型笔记本 */
+    .container {
+        max-width: 90%;
+        margin: 15px auto;
+        max-height: 88vh;
+    }
+    
     .main-game-area {
         flex-wrap: nowrap;
     }
     
     .history-area {
-        height: 350px; /* PC端更高一些 */
+        height: 350px;
     }
 }
 
 @media (max-width: 767px) {
-    /* 移动端样式 */
+    /* 手机设备 */
+    .container {
+        max-width: 95%;
+        margin: 10px auto;
+        max-height: 92vh;
+    }
+    
+    .game-content {
+        padding: 15px 10px;
+    }
+    
     .score-display {
         flex-direction: column;
         align-items: center;
@@ -679,12 +704,63 @@ body {
     }
     
     .history-area {
-        height: 250px; /* 移动端稍矮一些 */
+        height: 250px;
     }
     
     .role-options {
         flex-direction: column;
         align-items: center;
+    }
+    
+    /* 调整小屏幕上的游戏界面布局 */
+    .main-game-area {
+        flex-direction: column;
+    }
+    
+    .left-column, .right-column {
+        width: 100%;
+    }
+}
+
+/* 针对极小屏幕的优化 */
+@media (max-width: 360px) {
+    .container {
+        max-width: 98%;
+        margin: 5px auto;
+    }
+    
+    .header {
+        font-size: 1.3rem;
+        padding: 10px;
+    }
+    
+    .game-content {
+        padding: 10px 8px;
+    }
+}
+
+/* 针对高度很低的设备（如横屏手机）*/
+@media (max-height: 500px) {
+    .container {
+        max-height: 95vh;
+    }
+    
+    .role-btn {
+        padding: 10px;
+    }
+    
+    .role-icon {
+        font-size: 36px;
+        margin-bottom: 5px;
+    }
+    
+    .players-area {
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    
+    .history-area {
+        height: 150px;
     }
 }
 
@@ -728,4 +804,144 @@ body {
 .prompt-text.lose {
     color: #777;
     font-style: italic;
+}
+
+/* 对超大屏幕的优化 */
+@media (min-width: 1600px) {
+    /* 全高清及以上宽屏设备 */
+    .container {
+        max-width: 1200px;
+        max-height: 80vh;
+    }
+    
+    /* 增大字体和间距 */
+    body {
+        font-size: 18px;
+    }
+    
+    .header {
+        font-size: 1.8rem;
+        padding: 20px;
+    }
+    
+    .score-value {
+        font-size: 32px;
+    }
+    
+    .score-card {
+        padding: 20px 30px;
+        min-width: 150px;
+    }
+    
+    .role-btn {
+        width: 180px;
+        padding: 25px;
+    }
+    
+    .role-icon {
+        font-size: 56px;
+    }
+    
+    .btn-number {
+        width: 120px;
+        height: 120px;
+        font-size: 42px;
+    }
+    
+    .history-area {
+        height: 400px;
+    }
+    
+    .players-area {
+        padding: 20px;
+    }
+}
+
+/* 对4K及超高分辨率屏幕的优化 */
+@media (min-width: 2560px) {
+    .container {
+        max-width: 1500px;
+        max-height: 75vh;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    body {
+        font-size: 20px;
+    }
+    
+    .header {
+        font-size: 2.2rem;
+        padding: 25px;
+    }
+    
+    /* 进一步增大元素尺寸 */
+    .score-value {
+        font-size: 38px;
+    }
+    
+    .score-card {
+        padding: 25px 40px;
+        min-width: 180px;
+        border-radius: 16px;
+    }
+    
+    .role-btn {
+        width: 220px;
+        padding: 30px;
+        border-radius: 16px;
+    }
+    
+    .role-icon {
+        font-size: 68px;
+    }
+    
+    .player {
+        padding: 20px 25px;
+    }
+    
+    .player-avatar {
+        font-size: 58px;
+    }
+    
+    .btn-number {
+        width: 140px;
+        height: 140px;
+        font-size: 48px;
+        border-radius: 16px;
+    }
+    
+    /* 增大历史记录高度 */
+    .history-area {
+        height: 450px;
+        border-radius: 16px;
+    }
+    
+    /* 增大VS标签 */
+    .vs-label {
+        font-size: 38px;
+    }
+    
+    /* 增大边框和阴影 */
+    .user-player.active, .ai-player.active {
+        border-left-width: 8px;
+        border-right-width: 8px;
+    }
+}
+
+/* 针对超宽屏幕(21:9和更宽比例)的优化 */
+@media (min-width: 2000px) and (max-width: 2559px) and (min-aspect-ratio: 21/9) {
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    /* 调整布局以更好地利用水平空间 */
+    .main-game-area {
+        gap: 40px;
+    }
+    
+    .history-area {
+        height: 420px;
+    }
 } 

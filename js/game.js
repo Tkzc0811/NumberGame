@@ -70,34 +70,45 @@ const Game = {
         
         let number;
         
-        // 优化后的AI策略：尽量让总和变为3的倍数(3,6,9)
-        // 这样可以控制游戏节奏，迫使对手处于不利位置
+        // 必胜策略实现
+        // 必胜点：0、2、4、6、8、9
+        // 必败点：1、3、5、7
         
-        // 如果当前总和是8，AI选1避免直接失败
-        if (this.sum === 8) {
-            number = 1;
-        } 
-        // 如果当前总和是9，AI已无法避免失败，随机选择
-        else if (this.sum === 9) {
-            number = Math.random() < 0.5 ? 1 : 2;
-        }
-        // 如果可以直接让总和变为3、6或9（3的倍数），则这样做
-        else if ((this.sum + 1) % 3 === 0) {
-            number = 1;
-        }
-        else if ((this.sum + 2) % 3 === 0) {
-            number = 2;
-        }
-        // 如果无法直接达到3的倍数，选择更安全的数字
-        else {
-            // 如果当前是7，选1更安全，避免玩家直接达到10
-            if (this.sum === 7) {
+        switch (this.sum) {
+            case 0: // 开局选2
+                number = 2;
+                break;
+            case 1: // 在1处于必败点，但需要尽量拖延
+                number = 2; // 选择2，推进到3
+                break;
+            case 2: // 必胜点，选1推进到3
                 number = 1;
-            }
-            // 一般情况下，选1比选2更保守
-            else {
-                number = Math.random() < 0.7 ? 1 : 2; // 倾向于选1
-            }
+                break;
+            case 3: // 处于必败点，随便选
+                number = Math.random() < 0.5 ? 1 : 2;
+                break;
+            case 4: // 必胜点，选1推进到5
+                number = 1;
+                break;
+            case 5: // 处于必败点，随便选
+                number = Math.random() < 0.5 ? 1 : 2;
+                break;
+            case 6: // 必胜点，选1推进到7
+                number = 1;
+                break;
+            case 7: // 处于必败点，随便选
+                number = Math.random() < 0.5 ? 1 : 2;
+                break;
+            case 8: // 必胜点，选2直接获胜
+                number = 2;
+                break;
+            case 9: // 必胜点，选1直接获胜
+                number = 1;
+                break;
+            default:
+                // 不应该到达这里，但以防万一
+                number = 1;
+                break;
         }
         
         // 执行AI移动
@@ -108,8 +119,8 @@ const Game = {
     endGame() {
         let winner;
         
-        // 修改规则：总和达到或超过10的一方失败
-        winner = this.isUserTurn ? 'AI' : '你';
+        // 修改规则：总和达到或超过10的一方获胜
+        winner = this.isUserTurn ? '你' : 'AI';
         
         // 显示胜利画面
         Animations.showVictory(winner, this.sum, this.gameHistory.length);
