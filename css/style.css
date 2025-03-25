@@ -51,6 +51,7 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 75vh;
 }
 
 /* 角色选择区域 */
@@ -147,13 +148,13 @@ body {
 }
 
 .score-label {
-    font-size: 16px;
+    font-size: 32px;
     color: #555;
     margin-bottom: 5px;
 }
 
 .score-value {
-    font-size: 28px;
+    font-size: 42px;
     font-weight: bold;
 }
 
@@ -330,7 +331,7 @@ body {
     box-shadow: var(--card-shadow);
     min-height: 24px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 26px;
     transition: all 0.3s ease;
 }
 
@@ -377,7 +378,7 @@ body {
 }
 
 .history-title {
-    font-size: 18px;
+    font-size: 26px;
     font-weight: bold;
     margin-bottom: 10px;
     padding-bottom: 8px;
@@ -497,7 +498,7 @@ body {
 }
 
 .prompt-text {
-    font-size: 16px;
+    font-size: 26px;
     color: #555;
     margin: 15px 0;
     font-weight: 500;
@@ -656,11 +657,21 @@ body {
 }
 
 /* 响应式设计 */
-@media (min-width: 1200px) {
+@media (min-width: 1600px) {
     /* 大屏幕设备 */
     .container {
-        max-width: 900px;
-        max-height: 85vh;
+        max-width: 1600px;
+        max-height: 98vh;
+    }
+}
+
+
+/* 响应式设计 */
+@media (min-width: 1200px) and (max-width: 1599px) {
+    /* 大屏幕设备 */
+    .container {
+        max-width: 1200px;
+        max-height: 95vh;
     }
 }
 
@@ -730,7 +741,7 @@ body {
     }
     
     .header {
-        font-size: 1.3rem;
+        font-size: 2rem;
         padding: 10px;
     }
     
@@ -816,16 +827,16 @@ body {
     
     /* 增大字体和间距 */
     body {
-        font-size: 18px;
+        font-size: 32px;
     }
     
     .header {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
         padding: 20px;
     }
     
     .score-value {
-        font-size: 32px;
+        font-size: 64px;
     }
     
     .score-card {
@@ -850,6 +861,7 @@ body {
     
     .history-area {
         height: 400px;
+        min-height: 600px;
     }
     
     .players-area {
