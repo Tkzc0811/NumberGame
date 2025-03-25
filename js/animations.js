@@ -6,15 +6,17 @@ const Animations = {
         animatedNumber.className = `number-animation ${isHuman ? 'user-number' : 'robot-number'}`;
         animatedNumber.textContent = `+${number}`;
         
-        // 计算位置 - 从当前玩家的区域中心开始
-        const playerIndicator = isHuman ? UI.elements.userIndicator : UI.elements.robotIndicator;
-        const rect = playerIndicator.getBoundingClientRect();
-        const startX = rect.left + rect.width / 2;
-        const startY = rect.top + rect.height / 2;
+        // 将数字显示在状态区域的上方
+        const statusArea = document.querySelector('.status-area');
+        const rect = statusArea.getBoundingClientRect();
         
-        // 设置位置并确保可见
-        animatedNumber.style.left = `${startX}px`;
-        animatedNumber.style.top = `${startY}px`;
+        // 计算状态区域的中心点，并向上偏移
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top - 80; // 状态区域上方80px
+        
+        // 设置数字动画的位置
+        animatedNumber.style.left = `${centerX}px`;
+        animatedNumber.style.top = `${centerY}px`;
         
         document.body.appendChild(animatedNumber);
         
@@ -24,6 +26,9 @@ const Animations = {
                 animatedNumber.parentNode.removeChild(animatedNumber);
             }
         }, gameConfig.animationDuration);
+        
+        // 返回动画持续时间
+        return gameConfig.animationDuration;
     },
     
     // 创建胜利庆祝效果
@@ -58,13 +63,16 @@ const Animations = {
         // 确保显示提示文本
         document.querySelector('.prompt-text').style.display = 'block';
         
-        // 显示模态框
-        UI.showVictoryModal();
-        
-        // 只在玩家获胜时创建彩带效果
-        if (winner === '你') {
-            this.createConfetti();
-        }
+        // 延迟显示模态框，等待最后一个数字动画完成
+        setTimeout(() => {
+            // 显示模态框
+            UI.showVictoryModal();
+            
+            // 只在玩家获胜时创建彩带效果
+            if (winner === '你') {
+                this.createConfetti();
+            }
+        }, gameConfig.animationDuration);
     },
     
     // 准备历史记录列表

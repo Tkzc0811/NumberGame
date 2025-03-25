@@ -405,13 +405,19 @@ const UI = {
     
     // 添加历史记录项
     addHistoryItem(player, number, sum) {
+        // 创建离线文档片段，减少DOM操作
+        const fragment = document.createDocumentFragment();
+        
+        // 创建历史项容器
         const historyItem = document.createElement('div');
         historyItem.className = `history-item ${player === '你' ? 'user-move' : 'robot-move'}`;
         
+        // 创建数字标记
         const moveNumber = document.createElement('div');
         moveNumber.className = 'move-number';
         moveNumber.textContent = number;
         
+        // 创建文本内容区域
         const moveTextElem = document.createElement('div');
         moveTextElem.className = 'move-text';
         
@@ -429,17 +435,30 @@ const UI = {
             <span class="new-sum">${sum}</span>
         `;
         
+        // 将元素添加到文档片段
         historyItem.appendChild(moveNumber);
         historyItem.appendChild(moveTextElem);
-        this.elements.historyList.appendChild(historyItem);
+        fragment.appendChild(historyItem);
+        
+        // 在添加之前，先获取当前容器的scrollHeight
+        const container = document.querySelector('.history-list-container');
+        const wasAtBottom = container && (container.scrollTop + container.clientHeight >= container.scrollHeight - 20);
+        
+        // 一次性将所有内容添加到DOM，减少重排
+        this.elements.historyList.appendChild(fragment);
         
         // 更新previousSum为当前sum，为下一步做准备
         this.previousSum = sum;
         
-        // 自动滚动到底部
-        const container = document.querySelector('.history-list-container');
-        if (container) {
-            container.scrollTop = container.scrollHeight;
+        // 只有在用户滚动到底部附近时才执行自动滚动
+        if (wasAtBottom && container) {
+            // 使用setTimeout延迟执行滚动，避免与页面更新冲突
+            setTimeout(() => {
+                container.scrollTo({
+                    top: container.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 50);
         }
     },
     
