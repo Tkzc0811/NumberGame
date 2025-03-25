@@ -28,6 +28,9 @@ const Game = {
     makeMove(number, isHuman) {
         if (isHuman && !this.isUserTurn) return; // 防止用户在AI回合点击
         
+        // 记录移动前的总和
+        const previousSum = this.sum;
+        
         // 更新总和
         this.sum += number;
         UI.updateScore(this.sum);
@@ -38,12 +41,13 @@ const Game = {
         // 添加到历史记录
         const player = isHuman ? '你' : 'AI';
         
-        // 存储到游戏历史数组
+        // 存储到游戏历史数组，包含更详细的过程描述
         this.gameHistory.push({
             player: player,
             number: number,
+            previousSum: previousSum,
             sum: this.sum,
-            text: `添加了 ${number}。总和: ${this.sum}`
+            text: `选择了 ${number}。原来总和为 ${previousSum}，${previousSum} + ${number} = ${this.sum}`
         });
         
         // 添加到历史显示

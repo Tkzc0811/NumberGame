@@ -2,6 +2,7 @@
 const UI = {
     elements: {}, // 存储所有UI元素引用
     isViewingFromAllHistory: false, // 标记是否是从全部历史进入游戏详情
+    previousSum: 0, // 记录上一步的总和
     
     // 初始化UI元素引用
     init() {
@@ -45,6 +46,9 @@ const UI = {
         
         // 绑定UI事件
         this.bindEvents();
+        
+        // 初始化previousSum
+        this.previousSum = 0;
     },
     
     // 绑定UI事件
@@ -337,7 +341,29 @@ const UI = {
             
             const moveText = document.createElement('div');
             moveText.className = 'move-text';
-            moveText.textContent = `${move.player} ${move.text}`;
+            
+            // 根据player选择不同的CSS类
+            const numberClass = move.player === '你' ? 'user-added-number' : 'ai-added-number';
+            
+            // 使用更详细的过程描述和增强显示效果
+            if (move.hasOwnProperty('previousSum')) {
+                // 新格式的历史记录，包含详细过程并使用增强显示
+                moveText.innerHTML = `
+                    ${move.player} 选择了 <span class="${numberClass}">${move.number}</span>。
+                    原来总和为 <span class="prev-sum">${move.previousSum}</span>，
+                    <span class="prev-sum">${move.previousSum}</span> 
+                    <span class="math-symbol">+</span> 
+                    <span class="${numberClass}">${move.number}</span> 
+                    <span class="math-symbol">=</span> 
+                    <span class="new-sum">${move.sum}</span>
+                `;
+            } else {
+                // 老格式的历史记录，简单显示但仍应用一些样式
+                moveText.innerHTML = `
+                    ${move.player} 添加了 <span class="${numberClass}">${move.number}</span>。
+                    总和: <span class="new-sum">${move.sum}</span>
+                `;
+            }
             
             historyItem.appendChild(moveNumber);
             historyItem.appendChild(moveText);
@@ -388,11 +414,27 @@ const UI = {
         
         const moveTextElem = document.createElement('div');
         moveTextElem.className = 'move-text';
-        moveTextElem.textContent = `${player} 添加了 ${number}。总和: ${sum}`;
+        
+        // 根据player选择不同的CSS类
+        const numberClass = player === '你' ? 'user-added-number' : 'ai-added-number';
+        
+        // 使用HTML结构和CSS类来增强显示效果
+        moveTextElem.innerHTML = `
+            ${player} 选择了 <span class="${numberClass}">${number}</span>。
+            原来总和为 <span class="prev-sum">${this.previousSum}</span>，
+            <span class="prev-sum">${this.previousSum}</span> 
+            <span class="math-symbol">+</span> 
+            <span class="${numberClass}">${number}</span> 
+            <span class="math-symbol">=</span> 
+            <span class="new-sum">${sum}</span>
+        `;
         
         historyItem.appendChild(moveNumber);
         historyItem.appendChild(moveTextElem);
         this.elements.historyList.appendChild(historyItem);
+        
+        // 更新previousSum为当前sum，为下一步做准备
+        this.previousSum = sum;
         
         // 自动滚动到底部
         const container = document.querySelector('.history-list-container');
@@ -404,6 +446,7 @@ const UI = {
     // 清空历史记录
     clearHistory() {
         this.elements.historyList.innerHTML = '';
+        this.previousSum = 0; // 重置previousSum
     },
     
     // 更新胜利信息
