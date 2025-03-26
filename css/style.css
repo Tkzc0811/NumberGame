@@ -31,9 +31,10 @@ body {
 }
 
 .container {
-    width: 80%;  /* 修改为占屏幕80% */
-    min-width: 800px; /* 最小宽度保证在小屏上不会太小 */
-    margin: 20px;
+    width: 80%;
+    max-width: 1600px;
+    min-width: 800px;
+    margin: 5px auto; /* 进一步减少外边距 */
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--card-shadow);
@@ -41,35 +42,36 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    max-height: 90vh; /* 限制高度为视口高度的90% */
+    max-height: 99vh; /* 几乎使用整个视口高度 */
+    height: calc(100vh - 10px); /* 进一步减少边距 */
     transition: all 0.3s ease;
 }
 
 .header {
     background: linear-gradient(to right, var(--kid-blue), var(--kid-purple));
     color: white;
-    padding: 20px;
+    padding: 10px; /* 减少内边距 */
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.7rem; /* 进一步减小字体 */
     font-weight: bold;
-    flex-shrink: 0; /* 不缩小 */
+    flex-shrink: 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .game-content {
-    padding: 20px;
-    overflow: hidden; /* 防止内容溢出 */
+    padding: 5px 30px 5px 30px; /* 极大减少上下内边距 */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 75vh;
+    height: 100%;
+    min-height: 0;
     background-image: url('data:image/svg+xml;utf8,<svg width="30" height="30" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" fill="white"/><circle cx="15" cy="15" r="10" fill="%23f9f9f9"/></svg>');
 }
 
 /* 角色选择区域 */
 .role-selection {
     text-align: center;
-    padding: 20px 0;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -136,8 +138,8 @@ body {
 .game-rules {
     background-color: #fff8e1;
     border-radius: var(--border-radius);
-    padding: 20px;
-    margin: 25px auto;
+    padding: 10px;
+    margin: 10px auto;
     max-width: 600px;
     text-align: left;
     box-shadow: 0 4px 0 #ffe082;
@@ -148,6 +150,7 @@ body {
     color: var(--kid-orange);
     margin-top: 0;
     font-size: 28px;
+    margin-bottom: 10px;
 }
 
 .game-rules p {
@@ -160,31 +163,34 @@ body {
 .game-area {
     display: none;
     width: 100%;
-    max-width: 1600px;
+    max-width: 1800px;
     margin: 0 auto;
-    /* 使用绝对定位和固定高度确保内容不会导致页面滚动 */
     position: relative;
-    height: calc(100vh - 150px);
-    max-height: 900px;
-    overflow: hidden;
+    height: 100%;
+    overflow: visible;
 }
 
 /* 分数显示区域 */
 .score-display {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-bottom: 30px;
+    gap: 60px;
+    margin-bottom: 8px; /* 再次减少底部边距 */
+    padding: 0 10px;
 }
 
 .score-card {
     background-color: white;
     border-radius: var(--border-radius);
-    padding: 20px 30px;
-    min-width: 180px;
+    padding: 10px 25px; /* 进一步减少内边距 */
+    min-width: 200px;
+    max-width: 300px;
     box-shadow: var(--card-shadow);
     text-align: center;
     transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .current-sum {
@@ -208,13 +214,13 @@ body {
 }
 
 .score-label {
-    font-size: 18px;
+    font-size: 16px; /* 稍微减小字体 */
     color: #555;
-    margin-bottom: 10px;
+    margin-bottom: 5px; /* 减少底部边距 */
 }
 
 .score-value {
-    font-size: 46px;
+    font-size: 34px; /* 进一步减小字体 */
     font-weight: bold;
     color: #333;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
@@ -224,9 +230,10 @@ body {
 .main-game-area {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    /* 固定高度防止抖动 */
-    height: calc(100% - 140px);
+    gap: 8px; /* 再次减少间距 */
+    height: auto;
+    flex: 1;
+    min-height: 0;
     position: relative;
 }
 
@@ -234,8 +241,8 @@ body {
 .history-area {
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
-    padding: 15px 25px;
-    margin-bottom: 10px;
+    padding: 8px 25px; /* 进一步减少内边距 */
+    margin-bottom: 8px; /* 进一步减少底部边距 */
     display: flex;
     flex-direction: column;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
@@ -243,17 +250,16 @@ body {
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    /* 减小历史区域的高度 */
-    height: 160px;
+    height: 120px; /* 大幅减小高度 */
     overflow: hidden;
 }
 
 .history-title {
-    font-size: 24px;
+    font-size: 20px; /* 进一步减小字体 */
     font-weight: bold;
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 5px; /* 进一步减少边距 */
+    padding-bottom: 3px; /* 减少边距 */
+    border-bottom: 1px solid #e9ecef; /* 减少边框粗细 */
     flex-shrink: 0;
     color: #555;
 }
@@ -275,7 +281,7 @@ body {
 .history-flow {
     display: flex;
     flex-direction: row;
-    padding: 5px;
+    padding: 5px 5px; /* 减少内边距 */
     width: max-content;
 }
 
@@ -291,28 +297,32 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px; /* 进一步减少间距 */
+    padding: 0 20px;
 }
 
 .players-area {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 20px;
-    padding: 30px;
+    margin-bottom: 5px; /* 再次减少底部边距 */
+    padding: 8px 20px; /* 大幅减少内边距 */
     background-color: white;
     border-radius: var(--border-radius);
     box-shadow: var(--card-shadow);
-    border: 2px solid #eee;
+    border: 1px solid #eee; /* 减少边框 */
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .player {
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border 0.3s ease;
-    padding: 20px 30px;
+    padding: 8px 12px; /* 最小内边距 */
     border-radius: var(--border-radius);
-    width: 120px;
-    height: 150px;
+    width: 90px; /* 最小宽度 */
+    height: 100px; /* 最小高度 */
     box-sizing: border-box;
     position: relative;
 }
@@ -327,29 +337,37 @@ body {
 .player.active::after {
     content: "👉";
     position: absolute;
-    left: -45px;
+    left: -30px; /* 减少距离 */
     top: 50%;
     transform: translateY(-50%);
-    font-size: 36px;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    font-size: 24px; /* 减小箭头大小 */
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .player.active.ai-player::after {
     content: "👈";
     left: auto;
-    right: -45px;
+    right: -30px; /* 减少距离 */
 }
 
 .player-avatar {
-    font-size: 60px;
-    margin-bottom: 15px;
+    font-size: 38px; /* 最小头像大小 */
+    margin-bottom: 5px; /* 最小底部边距 */
 }
 
-/* 优化VS标签样式 */
-.vs-label {
-    font-size: 42px;
+/* 玩家名称 */
+.player-name {
     font-weight: bold;
-    margin: 0 40px;
+    font-size: 20px; /* 比原来小一点 */
+    margin-bottom: 5px; /* 减少底部边距 */
+    color: #444;
+}
+
+/* VS标签尺寸调整 */
+.vs-label {
+    font-size: 42px; /* 稍微减小 */
+    font-weight: bold;
+    margin: 0 30px; /* 减少间距 */
     background: linear-gradient(to right, var(--kid-blue) 50%, var(--kid-red) 50%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -418,30 +436,30 @@ body {
 
 /* 增强状态区域的对比度 */
 .status-area.user-turn {
-    border: 3px solid var(--kid-blue);
+    border: 1px solid var(--kid-blue); /* 最小边框 */
     background-color: rgba(91, 143, 249, 0.15);
-    box-shadow: 0 6px 0 var(--kid-blue);
+    box-shadow: 0 3px 0 var(--kid-blue); /* 最小阴影 */
 }
 
 .status-area.ai-turn {
-    border: 3px solid var(--kid-red);
+    border: 1px solid var(--kid-red); /* 最小边框 */
     background-color: rgba(255, 120, 117, 0.15);
-    box-shadow: 0 6px 0 var(--kid-red);
+    box-shadow: 0 3px 0 var(--kid-red); /* 最小阴影 */
 }
 
 /* 状态和控制区域 */
 .status-area {
     background-color: white;
     border-radius: var(--border-radius);
-    padding: 25px;
-    margin-bottom: 30px;
+    padding: 5px 20px; /* 最小内边距 */
+    margin-bottom: 5px; /* 最小底部边距 */
     text-align: center;
     box-shadow: var(--card-shadow);
-    min-height: 60px;
+    min-height: 65px; /* 最小高度 */
     font-weight: bold;
-    font-size: 32px;
+    font-size: 22px; /* 最小字体 */
     transition: border 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    height: 110px;
+    height: auto;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -451,30 +469,32 @@ body {
 .controls-area {
     display: flex;
     justify-content: center;
-    gap: 60px;
-    margin-bottom: 30px;
-    height: 130px;
+    gap: 60px; /* 再次减少间距 */
+    margin-bottom: 0; /* 去除底部边距 */
+    height: auto;
+    min-height: 100px; /* 最小高度 */
+    padding: 0; /* 去除内边距 */
 }
 
 .btn-number {
-    width: 120px;
-    height: 120px;
-    font-size: 54px;
+    width: 100px; /* 最小按钮尺寸 */
+    height: 100px;
+    font-size: 44px; /* 最小字体 */
     border: none;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--kid-blue), var(--kid-purple));
     color: white;
     cursor: pointer;
-    box-shadow: 0 8px 0 #3a70c2;
+    box-shadow: 0 5px 0 #3a70c2; /* 最小阴影 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     position: relative;
-    top: -4px;
+    top: -2px; /* 减少偏移 */
 }
 
 .btn-number:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 0 #3a70c2;
+    box-shadow: 0 10px 0 #3a70c2;
 }
 
 .btn-number:active {
@@ -591,8 +611,8 @@ body {
     background-color: white;
     border-radius: var(--border-radius);
     padding: 40px;
-    max-width: 1000px;
-    width: 90%;
+    max-width: 80%;
+    width: 1500px;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     text-align: center;
     transform: translateY(20px);
@@ -638,9 +658,9 @@ body {
     background-color: white;
     border-radius: var(--border-radius);
     padding: 40px;
-    max-width: 1400px;
-    width: 90%;
-    max-height: 85vh;
+    max-width: 80%;
+    width: 1500px;
+    max-height: 75vh;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     text-align: center;
     transform: translateY(20px);
@@ -791,19 +811,40 @@ body {
     filter: grayscale(50%);
 }
 
-/* 开始按钮区域 */
+/* 开始按钮区域 - 调整为包含三个按钮 */
 .start-buttons {
-    margin: 25px 0;
+    margin: 20px 0;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 15px; /* 减小按钮间距 */
+    flex-wrap: wrap; /* 在小屏幕上允许换行 */
 }
 
-/* 清除历史记录按钮区域 */
-.history-actions {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
+/* 调整按钮大小和间距，使三个按钮放在一行 */
+.start-buttons .btn {
+    padding: 12px 20px; /* 再次减小内边距 */
+    font-size: 18px; /* 进一步减小字体大小 */
+    min-width: 160px; /* 设置最小宽度保持一致性 */
+}
+
+/* 清除历史记录按钮样式调整 */
+.start-buttons .btn-danger {
+    background-color: var(--kid-red);
+    color: white;
+    border: none;
+    box-shadow: 0 6px 0 #c0392b;
+    font-size: 18px;
+}
+
+.start-buttons .btn-danger:hover {
+    background-color: #e74c3c;
+    box-shadow: 0 8px 0 #c0392b;
+    transform: translateY(-3px);
+}
+
+.start-buttons .btn-danger:active {
+    box-shadow: 0 2px 0 #c0392b;
+    transform: translateY(4px);
 }
 
 /* 确认清除模态框样式 */
@@ -872,7 +913,6 @@ body {
 .history-stats {
     display: flex;
     justify-content: space-around;
-    margin: 25px 0;
     padding: 25px;
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
@@ -912,7 +952,7 @@ body {
 
 .games-table th, 
 .games-table td {
-    padding: 18px 20px;
+    padding: 18px 10px;
     text-align: left;
     border-bottom: 2px solid #f0f0f0;
 }
@@ -1057,9 +1097,9 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     width: 100%;
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
 #victoryHistoryList .flow-item {
@@ -1072,17 +1112,17 @@ body {
     max-height: none;
 }
 
-/* 流程图步骤样式 */
+/* 流程图步骤样式调整 */
 .flow-step {
-    padding: 8px 15px;
-    border-radius: 30px;
-    margin: 5px 0;
+    padding: 5px 10px; /* 进一步减小内边距 */
+    border-radius: 18px; /* 减小圆角 */
+    margin: 2px 0; /* 减少边距 */
     font-weight: bold;
-    font-size: 28px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    font-size: 18px; /* 再次减小字体 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 减小阴影 */
     position: relative;
     z-index: 2;
-    min-width: 80px;
+    min-width: 60px; /* 减小最小宽度 */
     text-align: center;
 }
 
@@ -1098,17 +1138,18 @@ body {
     color: var(--kid-red);
 }
 
+/* 箭头大小调整 */
 .flow-arrow {
-    height: 30px;
-    margin: 0 5px;
+    height: 20px; /* 进一步减小高度 */
+    margin: 0 2px; /* 减少边距 */
     position: relative;
-    width: 30px;
+    width: 20px; /* 减小宽度 */
     flex-shrink: 0;
 }
 
 .flow-arrow::before {
     content: "→";
-    font-size: 28px;
+    font-size: 18px; /* 减小字体 */
     color: #999;
     position: absolute;
     left: 50%;
@@ -1158,4 +1199,70 @@ body {
     color: #999;
     display: flex;
     align-items: center;
+}
+
+/* 大屏特定优化 */
+@media screen and (min-width: 1600px) and (min-height: 900px) {
+    .container {
+        max-width: 1700px;
+        height: calc(100vh - 10px);
+    }
+    
+    .header {
+        padding: 8px; /* 再次减少 */
+    }
+    
+    .history-area {
+        height: 120px; /* 再次减小 */
+    }
+    
+    .game-content {
+        padding: 5px 30px 0 30px; /* 再次减少内边距 */
+    }
+    
+    .score-display {
+        margin-bottom: 5px; /* 再次减少 */
+    }
+    
+    .score-card {
+        padding: 8px 20px; /* 减小内边距 */
+    }
+    
+    .players-area {
+        padding: 10px 25px;
+        margin-bottom: 5px; /* 减小边距 */
+    }
+    
+    .status-area {
+        margin-bottom: 5px;
+        padding: 8px 20px;
+        min-height: 50px;
+    }
+    
+    .controls-area {
+        min-height: 110px;
+        margin: 0;
+    }
+    
+    .player {
+        width: 100px; /* 调整为更小尺寸 */
+        height: 120px;
+        padding: 10px 15px;
+    }
+    
+    .player-avatar {
+        font-size: 45px;
+        margin-bottom: 8px;
+    }
+    
+    .btn-number {
+        width: 110px;
+        height: 110px;
+    }
+    
+    /* 确保VS标签不占用太多空间 */
+    .vs-label {
+        font-size: 35px;
+        margin: 0 15px;
+    }
 } 
