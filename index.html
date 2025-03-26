@@ -60,7 +60,16 @@
                 </div>
                 
                 <div class="main-game-area">
-                    <div class="left-column">
+                    <!-- 历史记录区域 - 现在放在上方 -->
+                    <div class="history-area">
+                        <div class="history-title">报数过程</div>
+                        <div class="history-list-container">
+                            <div id="historyList"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 玩家和控制区域 - 放在下方 -->
+                    <div class="players-control-area">
                         <!-- 玩家区域 -->
                         <div class="players-area">
                             <div id="userIndicator" class="player user-player">
@@ -83,16 +92,6 @@
                         <div id="userControls" class="controls-area">
                             <button id="btn1" class="btn-number">1</button>
                             <button id="btn2" class="btn-number">2</button>
-                        </div>
-                    </div>
-                    
-                    <div class="right-column">
-                        <!-- 历史记录区域 -->
-                        <div class="history-area">
-                            <div class="history-title">历史记录</div>
-                            <div class="history-list-container">
-                                <div id="historyList"></div>
-                            </div>
                         </div>
                     </div>
                 </div>

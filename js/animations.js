@@ -80,23 +80,35 @@ const Animations = {
         // 清除胜利历史列表
         UI.elements.victoryHistoryList.innerHTML = '';
         
+        // 创建历史流容器
+        const historyFlow = document.createElement('div');
+        historyFlow.className = 'history-flow';
+        
         // 从存储的数组重建完整历史
-        Game.gameHistory.forEach(move => {
-            const historyItem = document.createElement('div');
-            historyItem.className = `history-item ${move.player === '你' ? 'user-move' : 'robot-move'}`;
+        Game.gameHistory.forEach((move, index) => {
+            // 创建流程项容器
+            const flowItem = document.createElement('div');
+            flowItem.className = 'flow-item';
             
-            const moveNumber = document.createElement('div');
-            moveNumber.className = 'move-number';
-            moveNumber.textContent = move.number;
+            // 创建步骤元素
+            const flowStep = document.createElement('div');
+            flowStep.className = `flow-step ${move.player === '你' ? 'user-step' : 'ai-step'}`;
+            flowStep.textContent = `${move.player === '你' ? '你' : 'AI'}:${move.number}`;
+            flowItem.appendChild(flowStep);
             
-            const moveText = document.createElement('div');
-            moveText.className = 'move-text';
-            moveText.textContent = `${move.player} ${move.text}`;
+            // 添加箭头（如果不是最后一步）
+            if (index < Game.gameHistory.length - 1) {
+                const arrow = document.createElement('div');
+                arrow.className = 'flow-arrow';
+                flowItem.appendChild(arrow);
+            }
             
-            historyItem.appendChild(moveNumber);
-            historyItem.appendChild(moveText);
-            UI.elements.victoryHistoryList.appendChild(historyItem);
+            // 添加到流程图
+            historyFlow.appendChild(flowItem);
         });
+        
+        // 将整个流程图添加到胜利历史列表
+        UI.elements.victoryHistoryList.appendChild(historyFlow);
     },
     
     // 设置彩带样式

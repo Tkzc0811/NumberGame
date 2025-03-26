@@ -220,30 +220,80 @@ body {
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 
-/* 创建左右列布局 */
+/* 创建上下布局 */
 .main-game-area {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 30px;
+    flex-direction: column;
+    gap: 20px;
     /* 固定高度防止抖动 */
     height: calc(100% - 140px);
     position: relative;
 }
 
-.left-column {
-    flex: 1;
-    min-width: 400px;
-}
-
-.right-column {
-    flex: 1;
-    min-width: 400px;
+/* 历史记录区域 */
+.history-area {
+    background-color: #f9f9f9;
+    border-radius: var(--border-radius);
+    padding: 15px 25px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border: 2px solid #eee;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    /* 减小历史区域的高度 */
+    height: 160px;
+    overflow: hidden;
 }
 
-/* 玩家区域 */
+.history-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #e9ecef;
+    flex-shrink: 0;
+    color: #555;
+}
+
+.history-list-container {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    /* 使用平滑滚动 */
+    scroll-behavior: smooth;
+    /* 允许横向滚动 */
+    white-space: nowrap;
+    /* 控制超出内容的显示方式 */
+    padding-right: 15px;
+}
+
+/* 流程图式历史记录 - 水平排列 */
+.history-flow {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    width: max-content;
+}
+
+.flow-item {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+    position: relative;
+}
+
+/* 玩家区域 - 放在下方 */
+.players-control-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .players-area {
     display: flex;
     justify-content: space-around;
@@ -431,87 +481,6 @@ body {
     transform: translateY(4px);
     box-shadow: 0 3px 0 #3a70c2;
     top: 0;
-}
-
-/* 历史记录区域 */
-.history-area {
-    background-color: #f9f9f9;
-    border-radius: var(--border-radius);
-    padding: 25px;
-    margin-bottom: 20px;
-    /* 使用固定高度，而非100%，防止抖动 */
-    height: 100%;
-    max-height: 650px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-    border: 2px solid #eee;
-    position: relative;
-    /* 使用固定宽度，防止抖动 */
-    width: calc(100% - 50px);
-    box-sizing: border-box;
-}
-
-.history-title {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e9ecef;
-    flex-shrink: 0; /* 防止标题被压缩 */
-    color: #555;
-}
-
-.history-list-container {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 15px;
-    /* 使用固定高度，避免内容变化时高度变化 */
-    height: calc(100% - 80px);
-    /* 禁用滚动条自动滚动 */
-    overflow-anchor: none;
-    /* 使用平滑滚动 */
-    scroll-behavior: smooth;
-    /* 控制超出内容的显示方式 */
-    overflow-x: hidden;
-}
-
-/* 历史记录项 */
-.history-item {
-    display: flex;
-    align-items: center;
-    padding: 18px 25px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    border: 2px solid transparent;
-    background-color: white;
-    min-height: 80px;
-    width: calc(100% - 10px);
-    box-sizing: border-box;
-    /* 禁用动画效果，防止抖动 */
-    transition: none;
-    /* 使用固定高度，防止内容变化导致高度变化 */
-    height: auto;
-}
-
-.move-number {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-weight: bold;
-    margin-right: 25px;
-    flex-shrink: 0;
-    font-size: 22px;
-}
-
-.move-text {
-    flex: 1;
-    font-size: 24px;
-    line-height: 1.6;
 }
 
 /* 新增：历史记录中各部分的颜色样式 */
@@ -1080,4 +1049,113 @@ body {
         opacity: 0;
         transform: translate(-50%, -150px) scale(0.8);
     }
+}
+
+/* 为历史记录胜利模态框添加水平样式 */
+#victoryHistoryList .history-flow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 20px 0;
+}
+
+#victoryHistoryList .flow-item {
+    margin: 5px;
+}
+
+/* 胜利历史模态框内的容器高度修改 */
+.history-list-container {
+    height: auto;
+    max-height: none;
+}
+
+/* 流程图步骤样式 */
+.flow-step {
+    padding: 8px 15px;
+    border-radius: 30px;
+    margin: 5px 0;
+    font-weight: bold;
+    font-size: 22px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2;
+    min-width: 80px;
+    text-align: center;
+}
+
+.user-step {
+    background-color: rgba(91, 143, 249, 0.15);
+    border: 2px solid var(--kid-blue);
+    color: var(--kid-blue);
+}
+
+.ai-step {
+    background-color: rgba(255, 120, 117, 0.15);
+    border: 2px solid var(--kid-red);
+    color: var(--kid-red);
+}
+
+.flow-arrow {
+    height: 30px;
+    margin: 0 5px;
+    position: relative;
+    width: 30px;
+    flex-shrink: 0;
+}
+
+.flow-arrow::before {
+    content: "→";
+    font-size: 28px;
+    color: #999;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 胜利历史流程图样式 */
+#victoryHistoryList .flow-step {
+    font-size: 26px;
+    padding: 10px 18px;
+}
+
+/* 全部历史样式部分 */
+.games-table .flow-view {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.games-table .mini-flow-step {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.games-table .mini-user-step {
+    background-color: rgba(91, 143, 249, 0.15);
+    border: 1px solid var(--kid-blue);
+    color: var(--kid-blue);
+}
+
+.games-table .mini-ai-step {
+    background-color: rgba(255, 120, 117, 0.15);
+    border: 1px solid var(--kid-red);
+    color: var(--kid-red);
+}
+
+.games-table .mini-flow-arrow {
+    font-size: 14px;
+    color: #999;
+    display: flex;
+    align-items: center;
 } 

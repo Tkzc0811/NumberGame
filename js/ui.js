@@ -310,8 +310,46 @@ const UI = {
             viewButton.textContent = '查看';
             viewButton.addEventListener('click', () => this.showGameDetails(game.id));
             actionCell.appendChild(viewButton);
-            row.appendChild(actionCell);
             
+            // 添加简洁的流程视图
+            if (game.history && game.history.length > 0) {
+                const flowView = document.createElement('div');
+                flowView.className = 'flow-view';
+                
+                // 最多显示前5步
+                const displaySteps = Math.min(5, game.history.length);
+                
+                for (let i = 0; i < displaySteps; i++) {
+                    const move = game.history[i];
+                    
+                    // 添加步骤元素
+                    const miniStep = document.createElement('span');
+                    miniStep.className = `mini-flow-step ${move.player === '你' ? 'mini-user-step' : 'mini-ai-step'}`;
+                    miniStep.textContent = `${move.player === '你' ? '你' : 'AI'}:${move.number}`;
+                    flowView.appendChild(miniStep);
+                    
+                    // 添加箭头（如果不是最后一步）
+                    if (i < displaySteps - 1) {
+                        const miniArrow = document.createElement('span');
+                        miniArrow.className = 'mini-flow-arrow';
+                        miniArrow.textContent = '→';
+                        flowView.appendChild(miniArrow);
+                    }
+                }
+                
+                // 如果有更多步骤，显示"..."
+                if (game.history.length > displaySteps) {
+                    const more = document.createElement('span');
+                    more.textContent = '...';
+                    more.style.color = '#999';
+                    more.style.margin = '0 5px';
+                    flowView.appendChild(more);
+                }
+                
+                actionCell.appendChild(flowView);
+            }
+            
+            row.appendChild(actionCell);
             this.elements.allGamesTableBody.appendChild(row);
         });
     },
@@ -330,45 +368,35 @@ const UI = {
             `游戏记录 - ${new Date(game.date).toLocaleString('zh-CN')}`;
         this.elements.moveCount.textContent = `总步数: ${game.moves}`;
         
+        // 创建历史流容器
+        const historyFlow = document.createElement('div');
+        historyFlow.className = 'history-flow';
+        
         // 填充历史记录
-        game.history.forEach(move => {
-            const historyItem = document.createElement('div');
-            historyItem.className = `history-item ${move.player === '你' ? 'user-move' : 'robot-move'}`;
+        game.history.forEach((move, index) => {
+            // 创建流程项容器
+            const flowItem = document.createElement('div');
+            flowItem.className = 'flow-item';
             
-            const moveNumber = document.createElement('div');
-            moveNumber.className = 'move-number';
-            moveNumber.textContent = move.number;
+            // 创建步骤元素
+            const flowStep = document.createElement('div');
+            flowStep.className = `flow-step ${move.player === '你' ? 'user-step' : 'ai-step'}`;
+            flowStep.textContent = `${move.player === '你' ? '你' : 'AI'}:${move.number}`;
+            flowItem.appendChild(flowStep);
             
-            const moveText = document.createElement('div');
-            moveText.className = 'move-text';
-            
-            // 根据player选择不同的CSS类
-            const numberClass = move.player === '你' ? 'user-added-number' : 'ai-added-number';
-            
-            // 使用更详细的过程描述和增强显示效果
-            if (move.hasOwnProperty('previousSum')) {
-                // 新格式的历史记录，包含详细过程并使用增强显示
-                moveText.innerHTML = `
-                    ${move.player} 选择了 <span class="${numberClass}">${move.number}</span>。
-                    原来总和为 <span class="prev-sum">${move.previousSum}</span>，
-                    <span class="prev-sum">${move.previousSum}</span> 
-                    <span class="math-symbol">+</span> 
-                    <span class="${numberClass}">${move.number}</span> 
-                    <span class="math-symbol">=</span> 
-                    <span class="new-sum">${move.sum}</span>
-                `;
-            } else {
-                // 老格式的历史记录，简单显示但仍应用一些样式
-                moveText.innerHTML = `
-                    ${move.player} 添加了 <span class="${numberClass}">${move.number}</span>。
-                    总和: <span class="new-sum">${move.sum}</span>
-                `;
+            // 添加箭头（如果不是最后一步）
+            if (index < game.history.length - 1) {
+                const arrow = document.createElement('div');
+                arrow.className = 'flow-arrow';
+                flowItem.appendChild(arrow);
             }
             
-            historyItem.appendChild(moveNumber);
-            historyItem.appendChild(moveText);
-            this.elements.victoryHistoryList.appendChild(historyItem);
+            // 添加到流程图
+            historyFlow.appendChild(flowItem);
         });
+        
+        // 将整个流程图添加到胜利历史列表
+        this.elements.victoryHistoryList.appendChild(historyFlow);
         
         // 设置标记表示从历史列表进入
         this.isViewingFromAllHistory = true;
@@ -405,57 +433,65 @@ const UI = {
     
     // 添加历史记录项
     addHistoryItem(player, number, sum) {
+        // 检查历史流容器是否存在，如果不存在则创建
+        let historyFlow = this.elements.historyList.querySelector('.history-flow');
+        if (!historyFlow) {
+            historyFlow = document.createElement('div');
+            historyFlow.className = 'history-flow';
+            this.elements.historyList.appendChild(historyFlow);
+        }
+        
         // 创建离线文档片段，减少DOM操作
         const fragment = document.createDocumentFragment();
         
-        // 创建历史项容器
-        const historyItem = document.createElement('div');
-        historyItem.className = `history-item ${player === '你' ? 'user-move' : 'robot-move'}`;
+        // 创建流程项容器
+        const flowItem = document.createElement('div');
+        flowItem.className = 'flow-item';
         
-        // 创建数字标记
-        const moveNumber = document.createElement('div');
-        moveNumber.className = 'move-number';
-        moveNumber.textContent = number;
+        // 创建步骤元素
+        const flowStep = document.createElement('div');
+        flowStep.className = `flow-step ${player === '你' ? 'user-step' : 'ai-step'}`;
+        flowStep.textContent = `${player === '你' ? '你' : 'AI'}:${number}`;
+        flowItem.appendChild(flowStep);
         
-        // 创建文本内容区域
-        const moveTextElem = document.createElement('div');
-        moveTextElem.className = 'move-text';
-        
-        // 根据player选择不同的CSS类
-        const numberClass = player === '你' ? 'user-added-number' : 'ai-added-number';
-        
-        // 使用HTML结构和CSS类来增强显示效果
-        moveTextElem.innerHTML = `
-            ${player} 选择了 <span class="${numberClass}">${number}</span>。
-            原来总和为 <span class="prev-sum">${this.previousSum}</span>，
-            <span class="prev-sum">${this.previousSum}</span> 
-            <span class="math-symbol">+</span> 
-            <span class="${numberClass}">${number}</span> 
-            <span class="math-symbol">=</span> 
-            <span class="new-sum">${sum}</span>
-        `;
+        // 添加箭头（如果不是最后一步）
+        // 这里不能准确判断是否是最后一步，但可以添加箭头，后续会处理
+        const arrow = document.createElement('div');
+        arrow.className = 'flow-arrow';
+        flowItem.appendChild(arrow);
         
         // 将元素添加到文档片段
-        historyItem.appendChild(moveNumber);
-        historyItem.appendChild(moveTextElem);
-        fragment.appendChild(historyItem);
+        fragment.appendChild(flowItem);
         
-        // 在添加之前，先获取当前容器的scrollHeight
+        // 在添加之前，先获取当前容器的scrollWidth
         const container = document.querySelector('.history-list-container');
-        const wasAtBottom = container && (container.scrollTop + container.clientHeight >= container.scrollHeight - 20);
+        const wasAtRight = container && (container.scrollLeft + container.clientWidth >= container.scrollWidth - 20);
         
         // 一次性将所有内容添加到DOM，减少重排
-        this.elements.historyList.appendChild(fragment);
+        historyFlow.appendChild(fragment);
         
         // 更新previousSum为当前sum，为下一步做准备
         this.previousSum = sum;
         
-        // 只有在用户滚动到底部附近时才执行自动滚动
-        if (wasAtBottom && container) {
+        // 处理最后一个元素的箭头显示
+        const allItems = historyFlow.querySelectorAll('.flow-item');
+        if (allItems.length > 0) {
+            const lastItem = allItems[allItems.length - 1];
+            // 暂时保留最后一个箭头，因为不知道是否会有下一步
+            
+            // 如果总和已达到目标，则移除最后一个箭头
+            if (sum >= gameConfig.targetSum) {
+                const lastArrow = lastItem.querySelector('.flow-arrow');
+                if (lastArrow) lastArrow.style.display = 'none';
+            }
+        }
+        
+        // 自动滚动到最右边，始终显示最新步骤
+        if (container) {
             // 使用setTimeout延迟执行滚动，避免与页面更新冲突
             setTimeout(() => {
                 container.scrollTo({
-                    top: container.scrollHeight,
+                    left: container.scrollWidth,
                     behavior: 'smooth'
                 });
             }, 50);
