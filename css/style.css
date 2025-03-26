@@ -147,11 +147,11 @@ body {
 .game-rules h3 {
     color: var(--kid-orange);
     margin-top: 0;
-    font-size: 22px;
+    font-size: 28px;
 }
 
 .game-rules p {
-    font-size: 18px;
+    font-size: 36px;
     line-height: 1.6;
     margin: 10px 0;
 }
@@ -667,7 +667,7 @@ body {
 }
 
 .close-history-btn {
-    font-size: 22px;
+    font-size: 28px;
     cursor: pointer;
     color: #666;
     background: none;
@@ -686,7 +686,7 @@ body {
     margin-bottom: 15px;
     font-weight: 500;
     color: #555;
-    font-size: 20px;
+    font-size: 28px;
 }
 
 /* 按钮样式 */
@@ -705,7 +705,7 @@ body {
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     color: white;
-    font-size: 20px;
+    font-size: 28px;
     box-shadow: 0 6px 0 rgba(0,0,0,0.1);
     position: relative;
     top: -3px;
@@ -876,7 +876,7 @@ body {
     padding: 25px;
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
-    font-size: 22px;
+    font-size: 28px;
 }
 
 .stat-item {
@@ -1078,7 +1078,7 @@ body {
     border-radius: 30px;
     margin: 5px 0;
     font-weight: bold;
-    font-size: 22px;
+    font-size: 28px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     position: relative;
     z-index: 2;
