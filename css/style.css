@@ -88,7 +88,7 @@ body {
     background-color: #f8f9fa;
     border: 3px solid #e9ecef;
     border-radius: var(--border-radius);
-    padding: 25px;
+    padding: 15px;
     width: 180px;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -292,28 +292,35 @@ body {
     position: relative;
 }
 
-/* 玩家区域 - 放在下方 */
+/* 玩家和状态区域放在同一行 */
 .players-control-area {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px; /* 进一步减少间距 */
+    gap: 8px; /* 减少间距 */
     padding: 0 20px;
 }
 
+/* 新增：创建玩家状态行容器 */
+.player-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+/* 玩家区域 - 调整为水平布局的左侧 */
 .players-area {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 5px; /* 再次减少底部边距 */
     padding: 8px 20px; /* 大幅减少内边距 */
     background-color: white;
     border-radius: var(--border-radius);
     box-shadow: var(--card-shadow);
     border: 1px solid #eee; /* 减少边框 */
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
+    flex: 0 0 auto; /* 不伸缩 */
 }
 
 .player {
@@ -447,15 +454,14 @@ body {
     box-shadow: 0 3px 0 var(--kid-red); /* 最小阴影 */
 }
 
-/* 状态和控制区域 */
+/* 状态区域 - 调整为水平布局的右侧 */
 .status-area {
     background-color: white;
     border-radius: var(--border-radius);
     padding: 5px 20px; /* 最小内边距 */
-    margin-bottom: 5px; /* 最小底部边距 */
     text-align: center;
     box-shadow: var(--card-shadow);
-    min-height: 65px; /* 最小高度 */
+    min-height: 60px; /* 调整高度 */
     font-weight: bold;
     font-size: 22px; /* 最小字体 */
     transition: border 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
@@ -464,6 +470,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1; /* 占用剩余空间 */
 }
 
 .controls-area {
@@ -1228,15 +1235,20 @@ body {
         padding: 8px 20px; /* 减小内边距 */
     }
     
+    /* 优化玩家状态行 */
+    .player-status-row {
+        gap: 20px;
+    }
+    
     .players-area {
         padding: 10px 25px;
-        margin-bottom: 5px; /* 减小边距 */
     }
     
     .status-area {
         margin-bottom: 5px;
         padding: 8px 20px;
         min-height: 50px;
+        font-size: 26px; /* 大屏幕上稍微增大字体 */
     }
     
     .controls-area {

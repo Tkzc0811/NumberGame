@@ -19,14 +19,12 @@
                     <div id="userFirstBtn" class="role-btn user-role">
                         <div class="role-icon">👤</div>
                         <div class="role-name">你先手</div>
-                        <div class="role-desc">你将先行动</div>
                     </div>
                     <div id="robotFirstBtn" class="role-btn robot-role selected">
                         <div class="role-icon">
                             <img src="assest/ai.png" alt="AI" class="ai-icon">
                         </div>
                         <div class="role-name">AI先手</div>
-                        <div class="role-desc">AI将先行动</div>
                     </div>
                 </div>
                 
@@ -67,23 +65,26 @@
                     
                     <!-- 玩家和控制区域 - 放在下方 -->
                     <div class="players-control-area">
-                        <!-- 玩家区域 -->
-                        <div class="players-area">
-                            <div id="userIndicator" class="player user-player">
-                                <div class="player-avatar">👤</div>
-                                <div class="player-name">你</div>
-                            </div>
-                            <div class="vs-label">VS</div>
-                            <div id="robotIndicator" class="player ai-player">
-                                <div class="player-avatar">
-                                    <img src="assest/ai.png" alt="AI" class="ai-icon">
+                        <!-- 玩家状态行 - 将玩家和状态区域放在一行 -->
+                        <div class="player-status-row">
+                            <!-- 玩家区域 -->
+                            <div class="players-area">
+                                <div id="userIndicator" class="player user-player">
+                                    <div class="player-avatar">👤</div>
+                                    <div class="player-name">你</div>
                                 </div>
-                                <div class="player-name">AI</div>
+                                <div class="vs-label">VS</div>
+                                <div id="robotIndicator" class="player ai-player">
+                                    <div class="player-avatar">
+                                        <img src="assest/ai.png" alt="AI" class="ai-icon">
+                                    </div>
+                                    <div class="player-name">AI</div>
+                                </div>
                             </div>
+                            
+                            <!-- 状态区域 -->
+                            <div id="status" class="status-area">游戏开始...</div>
                         </div>
-                        
-                        <!-- 状态区域 -->
-                        <div id="status" class="status-area">游戏开始...</div>
                         
                         <!-- 控制区域 -->
                         <div id="userControls" class="controls-area">
