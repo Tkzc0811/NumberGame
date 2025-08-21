@@ -1,185 +1,485 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报数游戏Ai 挑战赛</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>三国策略游戏</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #f0f0f0, #c9c9c9);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #aa0000;
+        }
+        
+        h1 {
+            color: #aa0000;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-info {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #aa0000;
+        }
+        
+        .factions {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .faction {
+            width: 220px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .faction:hover {
+            transform: translateY(-5px);
+        }
+        
+        .faction-shu {
+            border-top: 4px solid #0066cc;
+        }
+        
+        .faction-wei {
+            border-top: 4px solid #990000;
+        }
+        
+        .faction-wu {
+            border-top: 4px solid #cc9900;
+        }
+        
+        .faction-qun {
+            border-top: 4px solid #663399;
+        }
+        
+        .faction h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .units {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .unit {
+            width: 30%;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .unit-infantry {
+            border-top: 4px solid #556B2F;
+        }
+        
+        .unit-cavalry {
+            border-top: 4px solid #8B4513;
+        }
+        
+        .unit-archer {
+            border-top: 4px solid #696969;
+        }
+        
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .selection-area {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .general-pool, .player-team {
+            width: 48%;
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 300px;
+        }
+        
+        .general-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        
+        .general-card {
+            width: 120px;
+            height: 150px;
+            background: white;
+            border-radius: 5px;
+            margin: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .general-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .general-card.selected {
+            border: 2px solid #aa0000;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #aa0000;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #cc0000;
+        }
+        
+        .battle-result {
+            width: 100%;
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .relationship {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .relationship img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            报数游戏Ai 挑战赛
+        <header>
+            <h1>三国策略游戏</h1>
+            <p>选择你的武将，组建最强阵容，攻城略地！</p>
+        </header>
+        
+        <div class="game-info">
+            <h2>游戏规则</h2>
+            <p>1. 游戏分为四个阵营：蜀国、魏国、吴国、群雄，相互之间存在克制关系</p>
+            <p>2. 每个武将有不同兵种：步兵、骑兵、弓箭兵，兵种之间存在克制关系</p>
+            <p>3. 选择5名武将组成阵容进行攻城对战</p>
+            <p>4. 根据阵营和兵种克制关系计算战斗结果</p>
         </div>
-        <div class="game-content">
-            <!-- 角色选择区域 -->
-            <div id="roleSelection" class="role-selection">
-                <h2>选择先手玩家</h2>
-                <div class="role-options">
-                    <div id="userFirstBtn" class="role-btn user-role">
-                        <div class="role-icon">👤</div>
-                        <div class="role-name">你先手</div>
-                    </div>
-                    <div id="robotFirstBtn" class="role-btn robot-role selected">
-                        <div class="role-icon">
-                            <img src="assest/ai.png" alt="AI" class="ai-icon">
-                        </div>
-                        <div class="role-name">AI先手</div>
-                    </div>
-                </div>
-                
-                <div class="start-buttons">
-                    <button id="startGameBtn" class="btn btn-primary">开始游戏</button>
-                    <button id="showAllHistoryBtn" class="btn btn-outline">查看历史对局</button>
-                    <button id="clearHistoryBtn" class="btn btn-danger">清除历史记录</button>
-                </div>
-                
-                <div class="game-rules">
-                    <h3>游戏规则:</h3>
-                    <p>1. 玩家轮流报数，每次可以报1或2</p>
-                    <p>2. 总和先达到或超过10的一方获胜</p>
-                </div>
-            </div>
-            
-            <!-- 游戏区域 -->
-            <div id="gameArea" class="game-area">
-                <div class="score-display">
-                    <div class="score-card current-sum">
-                        <div class="score-label">当前总和:</div>
-                        <div id="result" class="score-value">0</div>
-                    </div>
-                    <div class="score-card target-sum">
-                        <div class="score-label">目标值:</div>
-                        <div class="score-value">10</div>
-                    </div>
-                </div>
-                
-                <div class="main-game-area">
-                    <!-- 历史记录区域 - 现在放在上方 -->
-                    <div class="history-area">
-                        <div class="history-title">报数过程</div>
-                        <div class="history-list-container">
-                            <div id="historyList"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- 玩家和控制区域 - 放在下方 -->
-                    <div class="players-control-area">
-                        <!-- 玩家状态行 - 将玩家和状态区域放在一行 -->
-                        <div class="player-status-row">
-                            <!-- 玩家区域 -->
-                            <div class="players-area">
-                                <div id="userIndicator" class="player user-player">
-                                    <div class="player-avatar">👤</div>
-                                    <div class="player-name">你</div>
-                                </div>
-                                <div class="vs-label">VS</div>
-                                <div id="robotIndicator" class="player ai-player">
-                                    <div class="player-avatar">
-                                        <img src="assest/ai.png" alt="AI" class="ai-icon">
-                                    </div>
-                                    <div class="player-name">AI</div>
-                                </div>
-                            </div>
-                            
-                            <!-- 状态区域 -->
-                            <div id="status" class="status-area">游戏开始...</div>
-                        </div>
-                        
-                        <!-- 控制区域 -->
-                        <div id="userControls" class="controls-area">
-                            <button id="btn1" class="btn-number">1</button>
-                            <button id="btn2" class="btn-number">2</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        
+        <div class="relationship">
+            <h3>阵营克制关系</h3>
+            <p>蜀 → 魏 → 吴 → 群 → 蜀 (→表示克制)</p>
+            <h3>兵种克制关系</h3>
+            <p>步兵 → 弓箭兵 → 骑兵 → 步兵 (→表示克制)</p>
         </div>
-    </div>
-
-    <!-- 胜利模态框 -->
-    <div id="victoryModal" class="modal-overlay">
-        <div id="victoryScreen" class="victory-screen">
-            <div class="trophy">🏆</div>
-            <div id="victoryMessage" class="victory-message">胜利！</div>
-            <div id="finalResult" class="score-value">总和: 12</div>
-            
-            <div class="prompt-text">恭喜你完成了这一局！想挑战自己吗？</div>
-            
-            <div class="victory-buttons">
-                <button id="playAgain" class="btn btn-primary">再来一局</button>
-                <button id="viewHistory" class="btn btn-outline">查看游戏历史</button>
+        
+        <div class="factions">
+            <div class="faction faction-shu">
+                <h3>蜀国</h3>
+                <p>以仁义闻名，擅长持久战</p>
+                <p>克制魏国，被群雄克制</p>
+            </div>
+            <div class="faction faction-wei">
+                <h3>魏国</h3>
+                <p>实力雄厚，擅长强攻</p>
+                <p>克制吴国，被蜀国克制</p>
+            </div>
+            <div class="faction faction-wu">
+                <h3>吴国</h3>
+                <p>水战专家，擅长防御</p>
+                <p>克制群雄，被魏国克制</p>
+            </div>
+            <div class="faction faction-qun">
+                <h3>群雄</h3>
+                <p>各方豪强，擅长奇袭</p>
+                <p>克制蜀国，被吴国克制</p>
             </div>
         </div>
         
-        <!-- 历史记录模态框 -->
-        <div id="historyModal" class="history-modal">
-            <div class="history-modal-header">
-                <div class="history-modal-title">游戏历史</div>
-                <button class="close-history-btn">&times;</button>
+        <div class="units">
+            <div class="unit unit-infantry">
+                <h3>步兵</h3>
+                <p>防御较强，克制弓箭兵</p>
+                <p>被骑兵克制</p>
             </div>
-            <div id="moveCount" class="move-count">总步数: 0</div>
-            <div class="history-list-container" style="height: 600px; overflow-y: auto;">
-                <div id="victoryHistoryList"></div>
+            <div class="unit unit-cavalry">
+                <h3>骑兵</h3>
+                <p>机动性强，克制步兵</p>
+                <p>被弓箭兵克制</p>
             </div>
-            <div class="victory-buttons">
-                <button class="btn btn-primary close-history-btn">返回</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 全部历史对局模态框 -->
-    <div id="allHistoryModal" class="modal-overlay">
-        <div class="all-history-modal">
-            <div class="history-modal-header">
-                <div class="history-modal-title">历史对局记录</div>
-                <!-- <button class="close-all-history-btn">&times;</button> -->
-            </div>
-            <div class="history-stats">
-                <div class="stat-item">总对局数: <span id="totalGames">0</span></div>
-                <div class="stat-item">你赢: <span id="userWins">0</span></div>
-                <div class="stat-item">AI赢: <span id="aiWins">0</span></div>
-            </div>
-            <div class="all-games-container">
-                <table id="allGamesTable" class="games-table">
-                    <thead>
-                        <tr>
-                            <th>对局</th>
-                            <th>时间</th>
-                            <th>先手</th>
-                            <th>获胜方</th>
-                            <th>步数</th>
-                            <th>查看</th>
-                        </tr>
-                    </thead>
-                    <tbody id="allGamesTableBody">
-                        <!-- 这里将动态填充历史对局 -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="victory-buttons">
-                <button class="btn btn-primary close-all-history-btn">返回</button>
+            <div class="unit unit-archer">
+                <h3>弓箭兵</h3>
+                <p>远程攻击，克制骑兵</p>
+                <p>被步兵克制</p>
             </div>
         </div>
-    </div>
-    
-    <!-- 确认清除历史记录模态框 -->
-    <div id="confirmClearModal" class="modal-overlay">
-        <div class="confirm-modal">
-            <div class="confirm-title">确认清除所有历史记录？</div>
-            <div class="confirm-message">此操作将永久删除所有游戏记录，无法恢复。</div>
-            <div class="confirm-buttons">
-                <button id="confirmClearBtn" class="btn btn-danger">确认清除</button>
-                <button id="cancelClearBtn" class="btn btn-outline">取消</button>
+        
+        <div class="game-area">
+            <h2>选择你的武将（最多选择5名）</h2>
+            
+            <div class="selection-area">
+                <div class="general-pool">
+                    <h3>武将池</h3>
+                    <div class="general-list" id="general-pool">
+                        <!-- 武将会通过JavaScript动态生成 -->
+                    </div>
+                </div>
+                
+                <div class="player-team">
+                    <h3>你的阵容</h3>
+                    <div class="general-list" id="player-team">
+                        <p>已选择: <span id="selected-count">0</span>/5</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button id="battle-btn">开始攻城</button>
+                <button id="reset-btn">重置选择</button>
+            </div>
+            
+            <div class="battle-result" id="battle-result">
+                <h3>战斗结果将显示在这里</h3>
             </div>
         </div>
+        
+        <footer>
+            <p>简易三国策略游戏 | 使用HTML、CSS和JavaScript实现</p>
+        </footer>
     </div>
 
-    <!-- 引入JavaScript文件 -->
-    <script src="js/config.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/game.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        // 游戏数据
+        const factions = ['蜀', '魏', '吴', '群'];
+        const unitTypes = ['步兵', '骑兵', '弓箭兵'];
+        
+        // 武将数据
+        const generals = [
+            { id: 1, name: '刘备', faction: '蜀', unit: '步兵', strength: 85 },
+            { id: 2, name: '关羽', faction: '蜀', unit: '骑兵', strength: 95 },
+            { id: 3, name: '张飞', faction: '蜀', unit: '步兵', strength: 90 },
+            { id: 4, name: '诸葛亮', faction: '蜀', unit: '弓箭兵', strength: 92 },
+            { id: 5, name: '赵云', faction: '蜀', unit: '骑兵', strength: 93 },
+            { id: 6, name: '曹操', faction: '魏', unit: '骑兵', strength: 94 },
+            { id: 7, name: '司马懿', faction: '魏', unit: '弓箭兵', strength: 91 },
+            { id: 8, name: '张辽', faction: '魏', unit: '骑兵', strength: 89 },
+            { id: 9, name: '许褚', faction: '魏', unit: '步兵', strength: 88 },
+            { id: 10, name: '夏侯惇', faction: '魏', unit: '骑兵', strength: 87 },
+            { id: 11, name: '孙权', faction: '吴', unit: '弓箭兵', strength: 86 },
+            { id: 12, name: '周瑜', faction: '吴', unit: '弓箭兵', strength: 93 },
+            { id: 13, name: '陆逊', faction: '吴', unit: '弓箭兵', strength: 90 },
+            { id: 14, name: '甘宁', faction: '吴', unit: '骑兵', strength: 88 },
+            { id: 15, name: '吕蒙', faction: '吴', unit: '步兵', strength: 87 },
+            { id: 16, name: '吕布', faction: '群', unit: '骑兵', strength: 98 },
+            { id: 17, name: '貂蝉', faction: '群', unit: '步兵', strength: 82 },
+            { id: 18, name: '华雄', faction: '群', unit: '骑兵', strength: 84 },
+            { id: 19, name: '袁绍', faction: '群', unit: '弓箭兵', strength: 83 },
+            { id: 20, name: '董卓', faction: '群', unit: '步兵', strength: 85 }
+        ];
+        
+        // 阵营克制关系
+        const factionCounter = {
+            '蜀': '魏',
+            '魏': '吴',
+            '吴': '群',
+            '群': '蜀'
+        };
+        
+        // 兵种克制关系
+        const unitCounter = {
+            '步兵': '弓箭兵',
+            '弓箭兵': '骑兵',
+            '骑兵': '步兵'
+        };
+        
+        // 已选择的武将
+        let selectedGenerals = [];
+        
+        // 初始化游戏
+        function initGame() {
+            const generalPool = document.getElementById('general-pool');
+            generalPool.innerHTML = '';
+            
+            // 创建武将卡片
+            generals.forEach(general => {
+                const card = document.createElement('div');
+                card.className = 'general-card';
+                card.dataset.id = general.id;
+                card.innerHTML = `
+                    <h4>${general.name}</h4>
+                    <p>阵营: ${general.faction}</p>
+                    <p>兵种: ${general.unit}</p>
+                    <p>战力: ${general.strength}</p>
+                `;
+                
+                card.addEventListener('click', () => selectGeneral(general));
+                generalPool.appendChild(card);
+            });
+            
+            // 添加事件监听器
+            document.getElementById('battle-btn').addEventListener('click', startBattle);
+            document.getElementById('reset-btn').addEventListener('click', resetSelection);
+        }
+        
+        // 选择武将
+        function selectGeneral(general) {
+            if (selectedGenerals.length >= 5) {
+                alert('最多只能选择5名武将！');
+                return;
+            }
+            
+            if (selectedGenerals.find(g => g.id === general.id)) {
+                alert('该武将已在你的阵容中！');
+                return;
+            }
+            
+            selectedGenerals.push(general);
+            updateSelectionDisplay();
+        }
+        
+        // 更新选择显示
+        function updateSelectionDisplay() {
+            const selectedCount = document.getElementById('selected-count');
+            selectedCount.textContent = selectedGenerals.length;
+            
+            const playerTeam = document.getElementById('player-team');
+            playerTeam.innerHTML = `<p>已选择: <span id="selected-count">${selectedGenerals.length}</span>/5</p>`;
+            
+            selectedGenerals.forEach(general => {
+                const card = document.createElement('div');
+                card.className = 'general-card';
+                card.innerHTML = `
+                    <h4>${general.name}</h4>
+                    <p>阵营: ${general.faction}</p>
+                    <p>兵种: ${general.unit}</p>
+                    <p>战力: ${general.strength}</p>
+                `;
+                
+                playerTeam.appendChild(card);
+            });
+        }
+        
+        // 重置选择
+        function resetSelection() {
+            selectedGenerals = [];
+            updateSelectionDisplay();
+            document.getElementById('battle-result').innerHTML = '<h3>战斗结果将显示在这里</h3>';
+        }
+        
+        // 开始战斗
+        function startBattle() {
+            if (selectedGenerals.length === 0) {
+                alert('请至少选择一名武将！');
+                return;
+            }
+            
+            // 简单模拟战斗结果
+            const playerPower = calculateTotalPower(selectedGenerals);
+            const enemyPower = playerPower * (0.8 + Math.random() * 0.4); // 随机敌人战力
+            
+            const resultElement = document.getElementById('battle-result');
+            
+            if (playerPower > enemyPower) {
+                resultElement.innerHTML = `
+                    <h3 style="color: green;">攻城胜利！</h3>
+                    <p>你的阵容战力: ${playerPower.toFixed(1)}</p>
+                    <p>守城敌军战力: ${enemyPower.toFixed(1)}</p>
+                    <p>你成功攻占了城池！</p>
+                `;
+            } else {
+                resultElement.innerHTML = `
+                    <h3 style="color: red;">攻城失败！</h3>
+                    <p>你的阵容战力: ${playerPower.toFixed(1)}</p>
+                    <p>守城敌军战力: ${enemyPower.toFixed(1)}</p>
+                    <p>你的部队撤退了，请重新组织阵容再次尝试。</p>
+                `;
+            }
+        }
+        
+        // 计算总战力（考虑克制关系）
+        function calculateTotalPower(team) {
+            let totalPower = 0;
+            
+            team.forEach(general => {
+                // 基础战力
+                let power = general.strength;
+                
+                // 这里可以添加更复杂的克制关系计算
+                // 例如：根据敌方阵容计算克制加成
+                
+                totalPower += power;
+            });
+            
+            return totalPower;
+        }
+        
+        // 初始化游戏
+        window.onload = initGame;
+    </script>
 </body>
 </html>
